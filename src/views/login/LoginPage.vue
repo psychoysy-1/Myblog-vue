@@ -1,21 +1,29 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { User, Lock, Avatar } from '@element-plus/icons-vue'
-import { userRegisterService } from '@/api/user.js'
+import { userRegisterService, userLoginService } from '@/api/user.js'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores'
 
 // 设置转换动画
-const isSignUp = ref(true)
+const isSignUp = ref(false)
 const switchForm = () => {
   isSignUp.value = !isSignUp.value
 }
 
-const form = ref()
+// 设置登录前和注册前校验对象
+const rForm = ref()
+const lForm = ref()
 // 定义注册表单
 const regFrom = ref({
   username: '',
   nickname: '',
   password: '',
   redpassword: ''
+})
+const loginForm = ref({
+  username: '',
+  password: ''
 })
 // 校验
 const rules = {
@@ -57,7 +65,7 @@ const rules = {
 // 注册逻辑
 const register = async () => {
   // 提交前进行校验
-  await form.value.validate()
+  await rForm.value.validate()
   await userRegisterService({
     username: regFrom.value.username,
     nickname: regFrom.value.nickname,
@@ -67,127 +75,152 @@ const register = async () => {
   isSignUp.value = false
 }
 
+// 登录逻辑
+const router = useRouter()
+const userStore = useUserStore()
+const login = async () => {
+  // 提交前进行校验
+  await lForm.value.validate()
+  const res = await userLoginService({
+    username: loginForm.value.username,
+    password: loginForm.value.password
+  })
+  // 登录逻辑
+  ElMessage.success(`欢迎! ${res.data.nickname}`)
+  // 储存token
+  userStore.setToken(res.data.token)
+  // 跳转到首页
+  router.push('/')
+}
+
 // 监听切换时候,表单内容重置
 watch(isSignUp, () => {
-  regFrom.value = {
+  ;(regFrom.value = {
     username: '',
     nickname: '',
     password: '',
     redpassword: ''
-  }
+  }),
+    (loginForm.value = {
+      username: '',
+      password: ''
+    })
 })
 </script>
 
 <template>
-  <div class="cont" :class="{ 's-signup': isSignUp }">
-    <!-- 登录相关 -->
-    <div class="form sign-in">
-      <el-form :width="640">
-        <el-form-item><h2>登录</h2></el-form-item>
-        <el-form-item class="label">
-          <span>用户名</span>
-          <el-input :prefix-icon="User"></el-input>
-        </el-form-item>
-        <el-form-item class="label">
-          <span>密码</span>
-          <el-input :prefix-icon="Lock" show-password></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button class="login-btn submit">登录</el-button>
-        </el-form-item>
-        <el-form-item>
-          <p class="forgot-pass">忘记密码?</p>
-        </el-form-item>
-      </el-form>
-
-      <!-- 小图标 -->
-      <div class="social-media">
-        <ul>
-          <li>
-            <a href="https://m.weibo.cn/"
-              ><img
-                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAh1BMVEUAAADXQDjTQDzaQzfcRTfbRDfcRDbcQzbbRDbbRDfcQzbaQzbbRDbbRDbaRDfcQzbbRDfaQjjaQjXcQzfYRDfbRDTbRDf////gW1D99PPtoZvyubT76Ob20M3pioLdT0Tvrajkc2n20c3rlo7mfnb0xcD43NrrlY7kcmniZ1343driZ1z0xMEgvW1iAAAAFnRSTlMAIBDf34Dv78+/n1BAj7CvcGBgkHBwDUc+aAAAAmpJREFUSMeVlueCqjAQRgOI0qy7m0YVsN297/98OwEdCUQ05w8WDt/MkIjEhJv8RIFHAS/c/CTkM9w4XFKN5ebwgeaDNWURObYa4s+oMWrG1MOruDV9w9o1eU5A37JwDN6CUksTPWsTPXvTRe89wXBCa2rB+ukd6By3K6ca8WcNVoyxLB26i0ex/mxgzRTiMlx990A6C09PZ6XKwXbpIyP6Fn4C8zKONHVYFrJ4tJWfoUMJ5k2PPBi0igHZrX8j4HVLITPXB7udeK1gHem9ziJjouTwQYmnhCCuxh5UhSJO9qKmWwxrTcZeyh5UpcyFyOH0Bi5SaYNNyG7qYeK95CttWUWlJn6PW5RsSgVtlyqxoEhEQs1rNEPrldf5cI8Qb+hxYRKlaVsSY4NZKqU81aynpQY0kTNF3pS4fsDFvTESx4Gi0b4vMqWKdl4UcHWukmSeZXnRV9Gb5VgcDucIJ3B11JbckSmKyXAC7V7I52hxI2WmyYYk0m7+Dbd8JR7boTYlbshOE9WBsYb+MglBZ6r4p8TxXL+Hi7zov2dCnY1N8v7ViIS4z21V9q3U7Ap9YkzOulnrLAkZLtYTA4f+CpYLHEjFgCMdtwhiTBGedT+D/NwtIHU2V3li4tE9iO5qaILQwvF4LNUtTLsr8InnTX6Pebfq8qopmup/V29W0CkRIaNISDmxJwLqNeEYHwG8repzltVpA/Ua8UmP61ErPHy2xnbiniBflg9WxA0sCnXJAMezadDSRM/aRM/eDMCb4n7Z/glE9rOhq5i8xPFfaz7GmdXIs9aw4O1qZIUxam9IdtuwS/aCaJcYrT+uh9kYccQkXQAAAABJRU5ErkJggg=="
-            /></a>
-          </li>
-          <li>
-            <a href="https://weixin.qq.com/"
-              ><img
-                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAgVBMVEUAAABXu0BYt0BQt0BXu0BWu0BXu0BXu0BXu0BWukBWukBXvEBXu0BXvEBXvEBYukBVukBXu0BWt0BXukBXuEBXu0D////1+/Pq9+fV7s/A5rer3aBsw1jg89uBzHBiwEy14auL0Xug2ZOW1YeBzG93yGSW1YjL6sO14azL6cN2yGP3XpzOAAAAFXRSTlMA3yAQ78+/r5+AUI9w74BgYEBAkHDBb56KAAACF0lEQVRIx52W6XKDIBRGwT3GZmsRUXFP0vb9H7AKGS8aiCXnR0TCmU/gOoh0uJck8jEZwUGYXND/cOPggyz4CE//0HZgKeDIsdSA3Qs1Bk2XejLF7ckGe1fnOT7ZBDsaDxNiZ4Jna4Jnb7rgbeKrK7QnFuzBOxIrYrsJAth9iIdl/9CwLE0pv/elqfoegWpfXdAUYINW9GRkRIBWakBemiOVGRbpE1lpijwaPDANCxvCc8qBbcVF47vq5EQ1YjCK3nyXiXE3QqrpSseeu+jptc96XgWmHSGDEGtCmDHygpK5nUuRdr2MvvfNdMvzXCN+KVNk6RO0qOpr37fXJzFCwdzmT9532THZovmqFHxlF3/WcdWQGUsBI2g3K/G3WG3o4oEVsVqOK4RHaTpfaKkXCVsWzPTL65pPN7X4kxnEX6qIXS4mJqfOH5tVKSJWzJsiXqlcklxe5AI0yuL4RDUpiKkGphRrRFRK+lLk88AQSg4KXVC9TvwSRQ4MU5m1xZ2xlmnEm1LkrqeKTVbU5rcaNtJDCAWqCOutq90CpjiKMTFQZuuah/9Oo+h6ZtPkYTSxI0YKReWLtxFBpJ5bzjOasWYsoBp6HQSRW5R5tz4C4HS0PltjO/H05sH6iQDXtz0d3/94ANPes/9Asjd9572PwE8X6Tm+DPViZMQ5mLUDxGnVCFtqwDH0VlYQS22bcxIGIhn7UXLWWn+10s6FZo+4YQAAAABJRU5ErkJggg=="
-            /></a>
-          </li>
-          <li>
-            <a href="https://im.qq.com/index/"
-              ><img
-                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAb1BMVEUAAABMouVIn+NEn99MouVMouVMo+ZMouVKouRKouJMn+NMouZLouRLo+VMoeNMouZLoeVLoeVNn+RMouX///+83Pal0PL0+v6x1vRireiay/FXqOfS6Pl5uevH4vePxe+Ev+1utOrp9Pzp8/yEv+7XzqLPAAAAE3RSTlMA3yAQ74C/n2BQQK9wz5CPz7BwJ8NfpgAAAbNJREFUSMe1lutygjAQhTeEOyi2AQIC3t//GcvYqk3OYsh0+v1yMN+czc4mQBwyL5ONUDMiLsqc1iGzOFQGYZGu0KLZQkQSrNSQ6I2aGRqkpktxlXJQSc4LNsqJCBhPOCQwwXOa6PmbErxlNpJeVMqD6uWliqOfprPiyN5tcOp0PaObntnmo9hIAV39pFNA9BOogKb+RQN/h9+RCfzR1gbtQqSArtQmemAjUy4QI7GxBTy92qKGJfEshlgp0DO15srmhuIRFuX0Cc/2KO5hUUkF1xt3dxKKuUS3uCPBjA0w4rySwqYyDLCM+EqxVrd45UTtFm81ywlEuzkHXhyhOfY1DArfntg+jRMY/PB80CeODaLhHigpt7fYNSgeuvpgD7k0j9V4Gfbc6RjN7oRE1rCeejVo27vMD4/WFokynB33qUpnUYb+t5zg7+OhNYrVxx5PIzGRJ9ijniwxIC7y3DV3urZ9/DrDfQxvR793a+YnpvRk6+Nt6YXceRQq//rxgKb/h87/fVrtAmKQW2c/JfGkb0PDjBYJomUtMuJQTcRKDUmL0LLiDDWevCzie7LYJGXOWl/BnLhvbq/sWgAAAABJRU5ErkJggg=="
-            /></a>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="sub-cont">
-      <!-- 滑块 -->
-      <div class="img">
-        <div class="img-text m-up">
-          <h2>新人?</h2>
-          <p>注册后发布一个你的博客吧!</p>
-        </div>
-        <div class="img-text m-in">
-          <h2>已经注册?</h2>
-          <p>快点登录并写一个自己的文章吧!</p>
-        </div>
-        <div class="img-btn" @click="switchForm">
-          <span class="m-up">注册</span>
-          <span class="m-in">登录</span>
-        </div>
-      </div>
-
-      <!-- 注册相关 -->
-      <div class="form sign-up">
-        <el-form :rules="rules" :width="640" :model="regFrom" ref="form">
-          <el-form-item><h2>注册</h2></el-form-item>
+  <div class="body">
+    <div class="cont" :class="{ 's-signup': isSignUp }">
+      <!-- 登录相关 -->
+      <div class="form sign-in">
+        <el-form :width="640" ref="lForm" :model="loginForm" :rules="rules">
+          <el-form-item><h2>登录</h2></el-form-item>
           <el-form-item class="label" prop="username">
             <span>用户名</span>
-            <el-input v-model="regFrom.username" :prefix-icon="User" clearable></el-input>
-          </el-form-item>
-          <el-form-item class="label" prop="nickname">
-            <span>昵称</span>
-            <el-input v-model="regFrom.nickname" :prefix-icon="Avatar" clearable></el-input>
+            <el-input :prefix-icon="User" v-model="loginForm.username" clearable></el-input>
           </el-form-item>
           <el-form-item class="label" prop="password">
             <span>密码</span>
-            <el-input v-model="regFrom.password" :prefix-icon="Lock" show-password></el-input>
-          </el-form-item>
-          <el-form-item class="label" prop="redpassword">
-            <span>确认密码</span>
-            <el-input v-model="regFrom.redpassword" :prefix-icon="Lock" show-password></el-input>
+            <el-input :prefix-icon="Lock" show-password v-model="loginForm.password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="reg-btn submit" @click="register">注册</el-button>
+            <el-button class="login-btn submit" @click="login">登录</el-button>
+          </el-form-item>
+          <el-form-item>
+            <p class="forgot-pass">忘记密码?</p>
           </el-form-item>
         </el-form>
+
+        <!-- 小图标 -->
+        <div class="social-media">
+          <ul>
+            <li>
+              <a href="https://m.weibo.cn/"
+                ><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAh1BMVEUAAADXQDjTQDzaQzfcRTfbRDfcRDbcQzbbRDbbRDfcQzbaQzbbRDbbRDbaRDfcQzbbRDfaQjjaQjXcQzfYRDfbRDTbRDf////gW1D99PPtoZvyubT76Ob20M3pioLdT0Tvrajkc2n20c3rlo7mfnb0xcD43NrrlY7kcmniZ1343driZ1z0xMEgvW1iAAAAFnRSTlMAIBDf34Dv78+/n1BAj7CvcGBgkHBwDUc+aAAAAmpJREFUSMeVlueCqjAQRgOI0qy7m0YVsN297/98OwEdCUQ05w8WDt/MkIjEhJv8RIFHAS/c/CTkM9w4XFKN5ebwgeaDNWURObYa4s+oMWrG1MOruDV9w9o1eU5A37JwDN6CUksTPWsTPXvTRe89wXBCa2rB+ukd6By3K6ca8WcNVoyxLB26i0ex/mxgzRTiMlx990A6C09PZ6XKwXbpIyP6Fn4C8zKONHVYFrJ4tJWfoUMJ5k2PPBi0igHZrX8j4HVLITPXB7udeK1gHem9ziJjouTwQYmnhCCuxh5UhSJO9qKmWwxrTcZeyh5UpcyFyOH0Bi5SaYNNyG7qYeK95CttWUWlJn6PW5RsSgVtlyqxoEhEQs1rNEPrldf5cI8Qb+hxYRKlaVsSY4NZKqU81aynpQY0kTNF3pS4fsDFvTESx4Gi0b4vMqWKdl4UcHWukmSeZXnRV9Gb5VgcDucIJ3B11JbckSmKyXAC7V7I52hxI2WmyYYk0m7+Dbd8JR7boTYlbshOE9WBsYb+MglBZ6r4p8TxXL+Hi7zov2dCnY1N8v7ViIS4z21V9q3U7Ap9YkzOulnrLAkZLtYTA4f+CpYLHEjFgCMdtwhiTBGedT+D/NwtIHU2V3li4tE9iO5qaILQwvF4LNUtTLsr8InnTX6Pebfq8qopmup/V29W0CkRIaNISDmxJwLqNeEYHwG8repzltVpA/Ua8UmP61ErPHy2xnbiniBflg9WxA0sCnXJAMezadDSRM/aRM/eDMCb4n7Z/glE9rOhq5i8xPFfaz7GmdXIs9aw4O1qZIUxam9IdtuwS/aCaJcYrT+uh9kYccQkXQAAAABJRU5ErkJggg=="
+              /></a>
+            </li>
+            <li>
+              <a href="https://weixin.qq.com/"
+                ><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAgVBMVEUAAABXu0BYt0BQt0BXu0BWu0BXu0BXu0BXu0BWukBWukBXvEBXu0BXvEBXvEBYukBVukBXu0BWt0BXukBXuEBXu0D////1+/Pq9+fV7s/A5rer3aBsw1jg89uBzHBiwEy14auL0Xug2ZOW1YeBzG93yGSW1YjL6sO14azL6cN2yGP3XpzOAAAAFXRSTlMA3yAQ78+/r5+AUI9w74BgYEBAkHDBb56KAAACF0lEQVRIx52W6XKDIBRGwT3GZmsRUXFP0vb9H7AKGS8aiCXnR0TCmU/gOoh0uJck8jEZwUGYXND/cOPggyz4CE//0HZgKeDIsdSA3Qs1Bk2XejLF7ckGe1fnOT7ZBDsaDxNiZ4Jna4Jnb7rgbeKrK7QnFuzBOxIrYrsJAth9iIdl/9CwLE0pv/elqfoegWpfXdAUYINW9GRkRIBWakBemiOVGRbpE1lpijwaPDANCxvCc8qBbcVF47vq5EQ1YjCK3nyXiXE3QqrpSseeu+jptc96XgWmHSGDEGtCmDHygpK5nUuRdr2MvvfNdMvzXCN+KVNk6RO0qOpr37fXJzFCwdzmT9532THZovmqFHxlF3/WcdWQGUsBI2g3K/G3WG3o4oEVsVqOK4RHaTpfaKkXCVsWzPTL65pPN7X4kxnEX6qIXS4mJqfOH5tVKSJWzJsiXqlcklxe5AI0yuL4RDUpiKkGphRrRFRK+lLk88AQSg4KXVC9TvwSRQ4MU5m1xZ2xlmnEm1LkrqeKTVbU5rcaNtJDCAWqCOutq90CpjiKMTFQZuuah/9Oo+h6ZtPkYTSxI0YKReWLtxFBpJ5bzjOasWYsoBp6HQSRW5R5tz4C4HS0PltjO/H05sH6iQDXtz0d3/94ANPes/9Asjd9572PwE8X6Tm+DPViZMQ5mLUDxGnVCFtqwDH0VlYQS22bcxIGIhn7UXLWWn+10s6FZo+4YQAAAABJRU5ErkJggg=="
+              /></a>
+            </li>
+            <li>
+              <a href="https://im.qq.com/index/"
+                ><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAb1BMVEUAAABMouVIn+NEn99MouVMouVMo+ZMouVKouRKouJMn+NMouZLouRLo+VMoeNMouZLoeVLoeVNn+RMouX///+83Pal0PL0+v6x1vRireiay/FXqOfS6Pl5uevH4vePxe+Ev+1utOrp9Pzp8/yEv+7XzqLPAAAAE3RSTlMA3yAQ74C/n2BQQK9wz5CPz7BwJ8NfpgAAAbNJREFUSMe1lutygjAQhTeEOyi2AQIC3t//GcvYqk3OYsh0+v1yMN+czc4mQBwyL5ONUDMiLsqc1iGzOFQGYZGu0KLZQkQSrNSQ6I2aGRqkpktxlXJQSc4LNsqJCBhPOCQwwXOa6PmbErxlNpJeVMqD6uWliqOfprPiyN5tcOp0PaObntnmo9hIAV39pFNA9BOogKb+RQN/h9+RCfzR1gbtQqSArtQmemAjUy4QI7GxBTy92qKGJfEshlgp0DO15srmhuIRFuX0Cc/2KO5hUUkF1xt3dxKKuUS3uCPBjA0w4rySwqYyDLCM+EqxVrd45UTtFm81ywlEuzkHXhyhOfY1DArfntg+jRMY/PB80CeODaLhHigpt7fYNSgeuvpgD7k0j9V4Gfbc6RjN7oRE1rCeejVo27vMD4/WFokynB33qUpnUYb+t5zg7+OhNYrVxx5PIzGRJ9ijniwxIC7y3DV3urZ9/DrDfQxvR793a+YnpvRk6+Nt6YXceRQq//rxgKb/h87/fVrtAmKQW2c/JfGkb0PDjBYJomUtMuJQTcRKDUmL0LLiDDWevCzie7LYJGXOWl/BnLhvbq/sWgAAAABJRU5ErkJggg=="
+              /></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-cont">
+        <!-- 滑块 -->
+        <div class="img">
+          <div class="img-text m-up">
+            <h2>新人?</h2>
+            <p>注册后发布一个你的博客吧!</p>
+          </div>
+          <div class="img-text m-in">
+            <h2>已经注册?</h2>
+            <p>快点登录并写一个自己的文章吧!</p>
+          </div>
+          <div class="img-btn" @click="switchForm">
+            <span class="m-up">注册</span>
+            <span class="m-in">登录</span>
+          </div>
+        </div>
+
+        <!-- 注册相关 -->
+        <div class="form sign-up">
+          <el-form :rules="rules" :width="640" :model="regFrom" ref="rForm">
+            <el-form-item><h2>注册</h2></el-form-item>
+            <el-form-item class="label" prop="username">
+              <span>用户名</span>
+              <el-input v-model="regFrom.username" :prefix-icon="User" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="label" prop="nickname">
+              <span>昵称</span>
+              <el-input v-model="regFrom.nickname" :prefix-icon="Avatar" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="label" prop="password">
+              <span>密码</span>
+              <el-input v-model="regFrom.password" :prefix-icon="Lock" show-password></el-input>
+            </el-form-item>
+            <el-form-item class="label" prop="redpassword">
+              <span>确认密码</span>
+              <el-input v-model="regFrom.redpassword" :prefix-icon="Lock" show-password></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button class="reg-btn submit" @click="register">注册</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 底部 -->
-  <div class="footer">
-    <p>© 2024 crerate by 由思远</p>
+    <!-- 底部 -->
+    <el-footer class="footer">
+      <p>© 2024 crerate by 由思远</p>
+    </el-footer>
   </div>
 </template>
 
+<!-- 全局设置  -->
 <style>
-/* 全局设置 */
 *,
 *:before,
 *:after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Nunito', sans-serif;
 }
+</style>
 
-body {
+<style scoped>
+.body {
   width: 100%;
   height: 100vh;
   display: flex;

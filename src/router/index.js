@@ -12,6 +12,23 @@ const router = createRouter({
       meta: {
         title: '登录页面'
       }
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: () => import('@/views/layout/LayoutPage.vue'),
+      redirect: '/home',
+      children: [
+        {
+          // 首页
+          path: '/home',
+          name: 'homePage',
+          component: () => import('@/views/home/HomePage.vue'),
+          meta: {
+            title: '首页'
+          }
+        }
+      ]
     }
   ]
 })
