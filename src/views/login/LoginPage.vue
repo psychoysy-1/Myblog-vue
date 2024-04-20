@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { User, Lock, Avatar } from '@element-plus/icons-vue'
+import { userRegisterService } from '@/api/user.js'
 
 // 设置转换动画
 const isSignUp = ref(true)
@@ -8,17 +9,78 @@ const switchForm = () => {
   isSignUp.value = !isSignUp.value
 }
 
-// const from = ref({
-//   username: '',
-//   nickname: '',
-//   password: '',
-//   redpassword: ''
-// })
-// const rules = ref({})
+const form = ref()
+// 定义注册表单
+const regFrom = ref({
+  username: '',
+  nickname: '',
+  password: '',
+  redpassword: ''
+})
+// 校验
+const rules = {
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { pattern: /^[a-zA-Z0-9]{5,12}$/, message: '用户名是5-12位英文字母或数字', trigger: 'blur' }
+  ],
+  nickname: [
+    { required: true, message: '请输入昵称', trigger: 'blur' },
+    {
+      pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]{2,10}$/,
+      message: '昵称是2-10位英文字母、数字或中文',
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    {
+      pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/,
+      message: '密码是6-12位数字、字母组合',
+      trigger: 'blur'
+    }
+  ],
+  redpassword: [
+    { required: true, message: '请确认密码', trigger: 'blur' },
+    {
+      validator: (rule, value, callback) => {
+        if (value !== regFrom.value.password) {
+          callback(new Error('两次密码输入不一致'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
+  ]
+}
+
+// 注册逻辑
+const register = async () => {
+  // 提交前进行校验
+  await form.value.validate()
+  await userRegisterService({
+    username: regFrom.value.username,
+    nickname: regFrom.value.nickname,
+    password: regFrom.value.password
+  })
+  ElMessage.success('注册成功')
+  isSignUp.value = false
+}
+
+// 监听切换时候,表单内容重置
+watch(isSignUp, () => {
+  regFrom.value = {
+    username: '',
+    nickname: '',
+    password: '',
+    redpassword: ''
+  }
+})
 </script>
 
 <template>
   <div class="cont" :class="{ 's-signup': isSignUp }">
+    <!-- 登录相关 -->
     <div class="form sign-in">
       <el-form :width="640">
         <el-form-item><h2>登录</h2></el-form-item>
@@ -82,26 +144,26 @@ const switchForm = () => {
 
       <!-- 注册相关 -->
       <div class="form sign-up">
-        <el-form :width="640">
+        <el-form :rules="rules" :width="640" :model="regFrom" ref="form">
           <el-form-item><h2>注册</h2></el-form-item>
-          <el-form-item class="label">
+          <el-form-item class="label" prop="username">
             <span>用户名</span>
-            <el-input :prefix-icon="User"></el-input>
+            <el-input v-model="regFrom.username" :prefix-icon="User" clearable></el-input>
           </el-form-item>
-          <el-form-item class="label">
+          <el-form-item class="label" prop="nickname">
             <span>昵称</span>
-            <el-input :prefix-icon="Avatar"></el-input>
+            <el-input v-model="regFrom.nickname" :prefix-icon="Avatar" clearable></el-input>
           </el-form-item>
-          <el-form-item class="label">
+          <el-form-item class="label" prop="password">
             <span>密码</span>
-            <el-input :prefix-icon="Lock" show-password></el-input>
+            <el-input v-model="regFrom.password" :prefix-icon="Lock" show-password></el-input>
           </el-form-item>
-          <el-form-item class="label">
+          <el-form-item class="label" prop="redpassword">
             <span>确认密码</span>
-            <el-input :prefix-icon="Lock" show-password></el-input>
+            <el-input v-model="regFrom.redpassword" :prefix-icon="Lock" show-password></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="reg-btn submit">注册</el-button>
+            <el-button class="reg-btn submit" @click="register">注册</el-button>
           </el-form-item>
         </el-form>
       </div>

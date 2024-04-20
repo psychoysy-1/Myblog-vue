@@ -8,9 +8,17 @@ const router = createRouter({
       // 登录页面
       path: '/login',
       name: 'login',
-      component: () => import('@/views/login/LoginPage.vue')
+      component: () => import('@/views/login/LoginPage.vue'),
+      meta: {
+        title: '登录页面'
+      }
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title || '我的博客'
+  next()
 })
 
 // 导出router
