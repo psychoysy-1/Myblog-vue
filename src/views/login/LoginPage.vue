@@ -1,50 +1,70 @@
 <script setup>
 import { ref } from 'vue'
+import { User, Lock, Avatar } from '@element-plus/icons-vue'
 
 // 设置转换动画
-const isSignUp = ref(false)
+const isSignUp = ref(true)
 const switchForm = () => {
   isSignUp.value = !isSignUp.value
 }
+
+// const from = ref({
+//   username: '',
+//   nickname: '',
+//   password: '',
+//   redpassword: ''
+// })
+// const rules = ref({})
 </script>
 
 <template>
   <div class="cont" :class="{ 's-signup': isSignUp }">
     <div class="form sign-in">
-      <h2>登录</h2>
-      <label>
-        <span>用户名</span>
-        <input type="email" name="email" />
-      </label>
-      <label>
-        <span>密码</span>
-        <input type="password" name="password" />
-      </label>
-      <button class="submit" type="button">登录</button>
-      <p class="forgot-pass">忘记密码?</p>
+      <el-form :width="640">
+        <el-form-item><h2>登录</h2></el-form-item>
+        <el-form-item class="label">
+          <span>用户名</span>
+          <el-input :prefix-icon="User"></el-input>
+        </el-form-item>
+        <el-form-item class="label">
+          <span>密码</span>
+          <el-input :prefix-icon="Lock" show-password></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="login-btn submit">登录</el-button>
+        </el-form-item>
+        <el-form-item>
+          <p class="forgot-pass">忘记密码?</p>
+        </el-form-item>
+      </el-form>
 
+      <!-- 小图标 -->
       <div class="social-media">
         <ul>
           <li>
-            <img
-              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAh1BMVEUAAADXQDjTQDzaQzfcRTfbRDfcRDbcQzbbRDbbRDfcQzbaQzbbRDbbRDbaRDfcQzbbRDfaQjjaQjXcQzfYRDfbRDTbRDf////gW1D99PPtoZvyubT76Ob20M3pioLdT0Tvrajkc2n20c3rlo7mfnb0xcD43NrrlY7kcmniZ1343driZ1z0xMEgvW1iAAAAFnRSTlMAIBDf34Dv78+/n1BAj7CvcGBgkHBwDUc+aAAAAmpJREFUSMeVlueCqjAQRgOI0qy7m0YVsN297/98OwEdCUQ05w8WDt/MkIjEhJv8RIFHAS/c/CTkM9w4XFKN5ebwgeaDNWURObYa4s+oMWrG1MOruDV9w9o1eU5A37JwDN6CUksTPWsTPXvTRe89wXBCa2rB+ukd6By3K6ca8WcNVoyxLB26i0ex/mxgzRTiMlx990A6C09PZ6XKwXbpIyP6Fn4C8zKONHVYFrJ4tJWfoUMJ5k2PPBi0igHZrX8j4HVLITPXB7udeK1gHem9ziJjouTwQYmnhCCuxh5UhSJO9qKmWwxrTcZeyh5UpcyFyOH0Bi5SaYNNyG7qYeK95CttWUWlJn6PW5RsSgVtlyqxoEhEQs1rNEPrldf5cI8Qb+hxYRKlaVsSY4NZKqU81aynpQY0kTNF3pS4fsDFvTESx4Gi0b4vMqWKdl4UcHWukmSeZXnRV9Gb5VgcDucIJ3B11JbckSmKyXAC7V7I52hxI2WmyYYk0m7+Dbd8JR7boTYlbshOE9WBsYb+MglBZ6r4p8TxXL+Hi7zov2dCnY1N8v7ViIS4z21V9q3U7Ap9YkzOulnrLAkZLtYTA4f+CpYLHEjFgCMdtwhiTBGedT+D/NwtIHU2V3li4tE9iO5qaILQwvF4LNUtTLsr8InnTX6Pebfq8qopmup/V29W0CkRIaNISDmxJwLqNeEYHwG8repzltVpA/Ua8UmP61ErPHy2xnbiniBflg9WxA0sCnXJAMezadDSRM/aRM/eDMCb4n7Z/glE9rOhq5i8xPFfaz7GmdXIs9aw4O1qZIUxam9IdtuwS/aCaJcYrT+uh9kYccQkXQAAAABJRU5ErkJggg=="
-            />
+            <a href="https://m.weibo.cn/"
+              ><img
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAh1BMVEUAAADXQDjTQDzaQzfcRTfbRDfcRDbcQzbbRDbbRDfcQzbaQzbbRDbbRDbaRDfcQzbbRDfaQjjaQjXcQzfYRDfbRDTbRDf////gW1D99PPtoZvyubT76Ob20M3pioLdT0Tvrajkc2n20c3rlo7mfnb0xcD43NrrlY7kcmniZ1343driZ1z0xMEgvW1iAAAAFnRSTlMAIBDf34Dv78+/n1BAj7CvcGBgkHBwDUc+aAAAAmpJREFUSMeVlueCqjAQRgOI0qy7m0YVsN297/98OwEdCUQ05w8WDt/MkIjEhJv8RIFHAS/c/CTkM9w4XFKN5ebwgeaDNWURObYa4s+oMWrG1MOruDV9w9o1eU5A37JwDN6CUksTPWsTPXvTRe89wXBCa2rB+ukd6By3K6ca8WcNVoyxLB26i0ex/mxgzRTiMlx990A6C09PZ6XKwXbpIyP6Fn4C8zKONHVYFrJ4tJWfoUMJ5k2PPBi0igHZrX8j4HVLITPXB7udeK1gHem9ziJjouTwQYmnhCCuxh5UhSJO9qKmWwxrTcZeyh5UpcyFyOH0Bi5SaYNNyG7qYeK95CttWUWlJn6PW5RsSgVtlyqxoEhEQs1rNEPrldf5cI8Qb+hxYRKlaVsSY4NZKqU81aynpQY0kTNF3pS4fsDFvTESx4Gi0b4vMqWKdl4UcHWukmSeZXnRV9Gb5VgcDucIJ3B11JbckSmKyXAC7V7I52hxI2WmyYYk0m7+Dbd8JR7boTYlbshOE9WBsYb+MglBZ6r4p8TxXL+Hi7zov2dCnY1N8v7ViIS4z21V9q3U7Ap9YkzOulnrLAkZLtYTA4f+CpYLHEjFgCMdtwhiTBGedT+D/NwtIHU2V3li4tE9iO5qaILQwvF4LNUtTLsr8InnTX6Pebfq8qopmup/V29W0CkRIaNISDmxJwLqNeEYHwG8repzltVpA/Ua8UmP61ErPHy2xnbiniBflg9WxA0sCnXJAMezadDSRM/aRM/eDMCb4n7Z/glE9rOhq5i8xPFfaz7GmdXIs9aw4O1qZIUxam9IdtuwS/aCaJcYrT+uh9kYccQkXQAAAABJRU5ErkJggg=="
+            /></a>
           </li>
           <li>
-            <img
-              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAgVBMVEUAAABXu0BYt0BQt0BXu0BWu0BXu0BXu0BXu0BWukBWukBXvEBXu0BXvEBXvEBYukBVukBXu0BWt0BXukBXuEBXu0D////1+/Pq9+fV7s/A5rer3aBsw1jg89uBzHBiwEy14auL0Xug2ZOW1YeBzG93yGSW1YjL6sO14azL6cN2yGP3XpzOAAAAFXRSTlMA3yAQ78+/r5+AUI9w74BgYEBAkHDBb56KAAACF0lEQVRIx52W6XKDIBRGwT3GZmsRUXFP0vb9H7AKGS8aiCXnR0TCmU/gOoh0uJck8jEZwUGYXND/cOPggyz4CE//0HZgKeDIsdSA3Qs1Bk2XejLF7ckGe1fnOT7ZBDsaDxNiZ4Jna4Jnb7rgbeKrK7QnFuzBOxIrYrsJAth9iIdl/9CwLE0pv/elqfoegWpfXdAUYINW9GRkRIBWakBemiOVGRbpE1lpijwaPDANCxvCc8qBbcVF47vq5EQ1YjCK3nyXiXE3QqrpSseeu+jptc96XgWmHSGDEGtCmDHygpK5nUuRdr2MvvfNdMvzXCN+KVNk6RO0qOpr37fXJzFCwdzmT9532THZovmqFHxlF3/WcdWQGUsBI2g3K/G3WG3o4oEVsVqOK4RHaTpfaKkXCVsWzPTL65pPN7X4kxnEX6qIXS4mJqfOH5tVKSJWzJsiXqlcklxe5AI0yuL4RDUpiKkGphRrRFRK+lLk88AQSg4KXVC9TvwSRQ4MU5m1xZ2xlmnEm1LkrqeKTVbU5rcaNtJDCAWqCOutq90CpjiKMTFQZuuah/9Oo+h6ZtPkYTSxI0YKReWLtxFBpJ5bzjOasWYsoBp6HQSRW5R5tz4C4HS0PltjO/H05sH6iQDXtz0d3/94ANPes/9Asjd9572PwE8X6Tm+DPViZMQ5mLUDxGnVCFtqwDH0VlYQS22bcxIGIhn7UXLWWn+10s6FZo+4YQAAAABJRU5ErkJggg=="
-            />
+            <a href="https://weixin.qq.com/"
+              ><img
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAgVBMVEUAAABXu0BYt0BQt0BXu0BWu0BXu0BXu0BXu0BWukBWukBXvEBXu0BXvEBXvEBYukBVukBXu0BWt0BXukBXuEBXu0D////1+/Pq9+fV7s/A5rer3aBsw1jg89uBzHBiwEy14auL0Xug2ZOW1YeBzG93yGSW1YjL6sO14azL6cN2yGP3XpzOAAAAFXRSTlMA3yAQ78+/r5+AUI9w74BgYEBAkHDBb56KAAACF0lEQVRIx52W6XKDIBRGwT3GZmsRUXFP0vb9H7AKGS8aiCXnR0TCmU/gOoh0uJck8jEZwUGYXND/cOPggyz4CE//0HZgKeDIsdSA3Qs1Bk2XejLF7ckGe1fnOT7ZBDsaDxNiZ4Jna4Jnb7rgbeKrK7QnFuzBOxIrYrsJAth9iIdl/9CwLE0pv/elqfoegWpfXdAUYINW9GRkRIBWakBemiOVGRbpE1lpijwaPDANCxvCc8qBbcVF47vq5EQ1YjCK3nyXiXE3QqrpSseeu+jptc96XgWmHSGDEGtCmDHygpK5nUuRdr2MvvfNdMvzXCN+KVNk6RO0qOpr37fXJzFCwdzmT9532THZovmqFHxlF3/WcdWQGUsBI2g3K/G3WG3o4oEVsVqOK4RHaTpfaKkXCVsWzPTL65pPN7X4kxnEX6qIXS4mJqfOH5tVKSJWzJsiXqlcklxe5AI0yuL4RDUpiKkGphRrRFRK+lLk88AQSg4KXVC9TvwSRQ4MU5m1xZ2xlmnEm1LkrqeKTVbU5rcaNtJDCAWqCOutq90CpjiKMTFQZuuah/9Oo+h6ZtPkYTSxI0YKReWLtxFBpJ5bzjOasWYsoBp6HQSRW5R5tz4C4HS0PltjO/H05sH6iQDXtz0d3/94ANPes/9Asjd9572PwE8X6Tm+DPViZMQ5mLUDxGnVCFtqwDH0VlYQS22bcxIGIhn7UXLWWn+10s6FZo+4YQAAAABJRU5ErkJggg=="
+            /></a>
           </li>
           <li>
-            <img
-              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAb1BMVEUAAABMouVIn+NEn99MouVMouVMo+ZMouVKouRKouJMn+NMouZLouRLo+VMoeNMouZLoeVLoeVNn+RMouX///+83Pal0PL0+v6x1vRireiay/FXqOfS6Pl5uevH4vePxe+Ev+1utOrp9Pzp8/yEv+7XzqLPAAAAE3RSTlMA3yAQ74C/n2BQQK9wz5CPz7BwJ8NfpgAAAbNJREFUSMe1lutygjAQhTeEOyi2AQIC3t//GcvYqk3OYsh0+v1yMN+czc4mQBwyL5ONUDMiLsqc1iGzOFQGYZGu0KLZQkQSrNSQ6I2aGRqkpktxlXJQSc4LNsqJCBhPOCQwwXOa6PmbErxlNpJeVMqD6uWliqOfprPiyN5tcOp0PaObntnmo9hIAV39pFNA9BOogKb+RQN/h9+RCfzR1gbtQqSArtQmemAjUy4QI7GxBTy92qKGJfEshlgp0DO15srmhuIRFuX0Cc/2KO5hUUkF1xt3dxKKuUS3uCPBjA0w4rySwqYyDLCM+EqxVrd45UTtFm81ywlEuzkHXhyhOfY1DArfntg+jRMY/PB80CeODaLhHigpt7fYNSgeuvpgD7k0j9V4Gfbc6RjN7oRE1rCeejVo27vMD4/WFokynB33qUpnUYb+t5zg7+OhNYrVxx5PIzGRJ9ijniwxIC7y3DV3urZ9/DrDfQxvR793a+YnpvRk6+Nt6YXceRQq//rxgKb/h87/fVrtAmKQW2c/JfGkb0PDjBYJomUtMuJQTcRKDUmL0LLiDDWevCzie7LYJGXOWl/BnLhvbq/sWgAAAABJRU5ErkJggg=="
-            />
+            <a href="https://im.qq.com/index/"
+              ><img
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAb1BMVEUAAABMouVIn+NEn99MouVMouVMo+ZMouVKouRKouJMn+NMouZLouRLo+VMoeNMouZLoeVLoeVNn+RMouX///+83Pal0PL0+v6x1vRireiay/FXqOfS6Pl5uevH4vePxe+Ev+1utOrp9Pzp8/yEv+7XzqLPAAAAE3RSTlMA3yAQ74C/n2BQQK9wz5CPz7BwJ8NfpgAAAbNJREFUSMe1lutygjAQhTeEOyi2AQIC3t//GcvYqk3OYsh0+v1yMN+czc4mQBwyL5ONUDMiLsqc1iGzOFQGYZGu0KLZQkQSrNSQ6I2aGRqkpktxlXJQSc4LNsqJCBhPOCQwwXOa6PmbErxlNpJeVMqD6uWliqOfprPiyN5tcOp0PaObntnmo9hIAV39pFNA9BOogKb+RQN/h9+RCfzR1gbtQqSArtQmemAjUy4QI7GxBTy92qKGJfEshlgp0DO15srmhuIRFuX0Cc/2KO5hUUkF1xt3dxKKuUS3uCPBjA0w4rySwqYyDLCM+EqxVrd45UTtFm81ywlEuzkHXhyhOfY1DArfntg+jRMY/PB80CeODaLhHigpt7fYNSgeuvpgD7k0j9V4Gfbc6RjN7oRE1rCeejVo27vMD4/WFokynB33qUpnUYb+t5zg7+OhNYrVxx5PIzGRJ9ijniwxIC7y3DV3urZ9/DrDfQxvR793a+YnpvRk6+Nt6YXceRQq//rxgKb/h87/fVrtAmKQW2c/JfGkb0PDjBYJomUtMuJQTcRKDUmL0LLiDDWevCzie7LYJGXOWl/BnLhvbq/sWgAAAABJRU5ErkJggg=="
+            /></a>
           </li>
         </ul>
       </div>
     </div>
 
     <div class="sub-cont">
+      <!-- 滑块 -->
       <div class="img">
         <div class="img-text m-up">
           <h2>新人?</h2>
@@ -59,25 +79,31 @@ const switchForm = () => {
           <span class="m-in">登录</span>
         </div>
       </div>
+
+      <!-- 注册相关 -->
       <div class="form sign-up">
-        <h2>注册</h2>
-        <label>
-          <span>用户名</span>
-          <input type="text" />
-        </label>
-        <label>
-          <span>昵称</span>
-          <input type="text" />
-        </label>
-        <label>
-          <span>密码</span>
-          <input type="password" />
-        </label>
-        <label>
-          <span>确认密码</span>
-          <input type="password" />
-        </label>
-        <button type="button" class="submit">现在注册</button>
+        <el-form :width="640">
+          <el-form-item><h2>注册</h2></el-form-item>
+          <el-form-item class="label">
+            <span>用户名</span>
+            <el-input :prefix-icon="User"></el-input>
+          </el-form-item>
+          <el-form-item class="label">
+            <span>昵称</span>
+            <el-input :prefix-icon="Avatar"></el-input>
+          </el-form-item>
+          <el-form-item class="label">
+            <span>密码</span>
+            <el-input :prefix-icon="Lock" show-password></el-input>
+          </el-form-item>
+          <el-form-item class="label">
+            <span>确认密码</span>
+            <el-input :prefix-icon="Lock" show-password></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button class="reg-btn submit">注册</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
   </div>
@@ -89,6 +115,7 @@ const switchForm = () => {
 </template>
 
 <style>
+/* 全局设置 */
 *,
 *:before,
 *:after {
@@ -119,13 +146,7 @@ body {
   padding: 10px 0;
 }
 
-input,
-button {
-  border: none;
-  outline: none;
-  background: none;
-}
-
+/* 中间盒子样式设置 */
 .cont {
   overflow: hidden;
   position: relative;
@@ -137,6 +158,7 @@ button {
     0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
+/* 表格大小样式设置 */
 .form {
   position: relative;
   width: 640px;
@@ -150,38 +172,29 @@ button {
     -webkit-transform 1.2s ease-in-out;
 }
 
+/* 顶部标题样式设置 */
 h2 {
   width: 100%;
   font-size: 30px;
   text-align: center;
 }
 
-label {
-  display: block;
+.label {
   width: 260px;
-  margin: 25px auto 0;
-  text-align: center;
+  margin: 20px auto 0;
 }
-
-label span {
-  font-size: 14px;
+.label span {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 15px;
   font-weight: 600;
   color: #505f75;
   text-transform: uppercase;
 }
 
-input {
-  display: block;
-  width: 100%;
-  margin-top: 5px;
-  font-size: 16px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid rgba(109, 93, 93, 0.4);
-  text-align: center;
-  font-family: 'Nunito', sans-serif;
-}
-
-button {
+/* 登录注册按钮样式设置 */
+.login-btn,
+.reg-btn {
   display: block;
   margin: 0 auto;
   width: 260px;
@@ -191,49 +204,45 @@ button {
   font-size: 15px;
   cursor: pointer;
 }
-
 .submit {
   margin-top: 40px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   font-weight: 600;
-  font-family: 'Nunito', sans-serif;
   background: -webkit-linear-gradient(left, #7579ff, #b224ef);
 }
-
 .submit:hover {
+  color: white;
   background: -webkit-linear-gradient(left, #b224ef, #7579ff);
 }
 
+/* 忘记密码 */
 .forgot-pass {
-  margin-top: 15px;
+  width: 600px;
+  margin-top: 5px;
   text-align: center;
   font-size: 14px;
   font-weight: 600;
   color: #0c0101;
   cursor: pointer;
 }
-
 .forgot-pass:hover {
   color: red;
 }
 
+/* 三个小图标 */
 .social-media {
   width: 100%;
   text-align: center;
-  margin-top: 20px;
 }
-
 .social-media ul {
   list-style: none;
 }
-
 .social-media ul li {
   display: inline-block;
   cursor: pointer;
-  margin: 25px 15px;
+  margin: 15px 15px;
 }
-
 .social-media img {
   width: 40px;
   height: 40px;
@@ -253,11 +262,13 @@ button {
   transition: transform 1.2s ease-in-out;
 }
 
+/* 位移样式设置 */
 .cont.s-signup .sub-cont {
   -webkit-transform: translate3d(-640px, 0, 0);
   transform: translate3d(-640px, 0, 0);
 }
 
+/* 滑块按钮设置 */
 .img {
   overflow: hidden;
   z-index: 2;
@@ -268,7 +279,6 @@ button {
   height: 100%;
   padding-top: 360px;
 }
-
 .img:before {
   content: '';
   position: absolute;
@@ -283,7 +293,6 @@ button {
     transform 1.2s ease-in-out,
     -webkit-transform 1.2s ease-in-out;
 }
-
 .img:after {
   content: '';
   position: absolute;
@@ -293,12 +302,12 @@ button {
   height: 100%;
   background: rgba(0, 0, 0, 0.3);
 }
-
 .cont.s-signup .img:before {
   -webkit-transform: translate3d(640px, 0, 0);
   transform: translate3d(640px, 0, 0);
 }
 
+/* 图片上字设置 */
 .img-text {
   z-index: 2;
   position: absolute;
@@ -314,27 +323,24 @@ button {
     transform 1.2s ease-in-out,
     -webkit-transform 1.2s ease-in-out;
 }
-
 .img-text h2 {
   margin-bottom: 10px;
   font-weight: normal;
 }
-
 .img-text p {
   font-size: 14px;
   line-height: 1.5;
 }
 
+/* 滑块按钮设置 */
 .cont.s-signup .img-text.m-up {
   -webkit-transform: translateX(520px);
   transform: translateX(520px);
 }
-
 .img-text.m-in {
   -webkit-transform: translateX(-520px);
   transform: translateX(-520px);
 }
-
 .cont.s-signup .img-text.m-in {
   -webkit-transform: translateX(0);
   transform: translateX(0);
