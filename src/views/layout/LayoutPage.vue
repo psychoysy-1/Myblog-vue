@@ -11,9 +11,11 @@ import {
 import { ref } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
+import WechatDialog from './components/WechatDialog.vue'
 
 const userStore = useUserStore()
 const router = useRouter()
+const dialog = ref()
 const isCollapse = ref(false)
 
 // 设置用户区域弹框隐藏显示
@@ -27,6 +29,11 @@ const changeOptionsBox = () => {
     // 隐藏弹框
     document.querySelector('.options-box').style.display = 'none'
   }
+}
+
+// 显示微信弹窗
+const showWechatDialog = () => {
+  dialog.value.showWechat(true)
 }
 
 // 退出登录
@@ -87,12 +94,14 @@ const logout = async () => {
         </div>
 
         <!-- 获取应用弹窗 -->
-        <div class="getMobile">
+        <div class="getMobile" @click="showWechatDialog">
           <el-icon color="black"><Iphone /></el-icon>
           <div class="get-mobile-text">获取应用</div>
         </div>
+        <!-- 弹窗 -->
+        <wechat-dialog ref="dialog"></wechat-dialog>
 
-        <!-- 设置弹框 -->
+        <!-- 用户设置 -->
         <div class="options-box">
           <div class="theme-module">
             <span>主题设置:</span>
