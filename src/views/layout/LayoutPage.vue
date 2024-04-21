@@ -1,5 +1,13 @@
 <script setup>
-import { Tools, Management, BellFilled, List, MoreFilled } from '@element-plus/icons-vue'
+import {
+  Tools,
+  Management,
+  BellFilled,
+  List,
+  MoreFilled,
+  PictureFilled,
+  Iphone
+} from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
@@ -32,7 +40,7 @@ const logout = async () => {
   <el-container class="layout-container">
     <!-- 导航条设置 -->
     <el-aside width="248px">
-      <el-menu class="el-menu-vertical-demo" :collapse="isCollapse">
+      <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" router>
         <!-- 图标和首页 -->
         <div class="el-aside-home">
           <a href="/home">
@@ -52,11 +60,15 @@ const logout = async () => {
           <el-icon><List /></el-icon>
           <template #title>博客分类</template>
         </el-menu-item>
-        <el-menu-item index="3">
+        <el-menu-item index="/photoWall">
+          <el-icon><PictureFilled /></el-icon>
+          <template #title>照片</template>
+        </el-menu-item>
+        <el-menu-item index="4">
           <el-icon><BellFilled /></el-icon>
           <template #title>通知</template>
         </el-menu-item>
-        <el-menu-item index="4">
+        <el-menu-item index="5">
           <el-icon><Tools /></el-icon>
           <template #title>设置</template>
         </el-menu-item>
@@ -72,6 +84,12 @@ const logout = async () => {
               <el-icon><MoreFilled /></el-icon>
             </div>
           </div>
+        </div>
+
+        <!-- 获取应用弹窗 -->
+        <div class="getMobile">
+          <el-icon color="black"><Iphone /></el-icon>
+          <div class="get-mobile-text">获取应用</div>
         </div>
 
         <!-- 设置弹框 -->
@@ -96,9 +114,9 @@ const logout = async () => {
         </div>
       </el-menu>
     </el-aside>
-    <el-container>
-      <el-main>Main</el-main>
-    </el-container>
+    <el-main>
+      <router-view></router-view>
+    </el-main>
   </el-container>
 </template>
 
@@ -106,16 +124,35 @@ const logout = async () => {
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 </style>
 
 <style scoped lang="scss">
-/* 弹窗设置 */
+// 获取应用
+.getMobile {
+  position: absolute;
+  bottom: 75px;
+  left: 11px;
+  width: 224px;
+  height: 40px;
+  border: 1px solid #cbced4;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  .get-mobile-text {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+}
+
+/* 设置的弹窗 */
 .options-box {
   position: absolute;
   bottom: 65px;
-  left: 11px;
+  left: 12px;
   right: 0;
   background-color: #fff;
   width: 224px;
@@ -131,6 +168,7 @@ body {
   }
 }
 
+// 主题模块
 .theme-module {
   display: flex;
   flex-direction: column;
@@ -274,7 +312,6 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
@@ -282,9 +319,23 @@ body {
   height: 100vh;
 }
 
+// 设置导航条位置
 .el-aside {
-  overflow-x: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  height: 100%;
   overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+// 设置路由出口位置
+.el-main {
+  height: auto;
+  margin-left: 248px;
+  width: calc(100vw - 248px);
 }
 
 /* 设置顶部我的博客logo */

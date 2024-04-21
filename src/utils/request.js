@@ -15,7 +15,7 @@ instance.interceptors.request.use(
     // TODO 2. 携带token
     const userStore = useUserStore()
     if (userStore.token) {
-      config.headers.Authorization = userStore.token
+      config.headers.Authorization = `Bearer ${userStore.token}`
     }
     return config
   },

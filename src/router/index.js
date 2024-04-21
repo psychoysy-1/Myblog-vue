@@ -28,6 +28,15 @@ const router = createRouter({
           meta: {
             title: '首页'
           }
+        },
+        {
+          // 照片墙
+          path: '/photoWall',
+          name: 'photoWallPage',
+          component: () => import('@/views/photo/PhotoWallPage.vue'),
+          meta: {
+            title: '照片墙'
+          }
         }
       ]
     }
