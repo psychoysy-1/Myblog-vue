@@ -17,7 +17,6 @@
     "axios": "^1.6.8",
     "element-plus": "^2.7.0",
     "pinia": "^2.1.7",
-    "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
@@ -29,6 +28,7 @@
     "eslint-plugin-vue": "^9.23.0",
     "husky": "^8.0.0",
     "lint-staged": "^15.2.2",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "prettier": "^3.2.5",
     "sass": "^1.75.0",
     "unplugin-auto-import": "^0.17.5",

@@ -1,4 +1,5 @@
 // createWebHistory用来设置不刷新浏览器就可以更换路由地址
+import { useUserStore } from '@/stores'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -33,9 +34,10 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
+  const useStore = useUserStore()
+  if (!useStore.token && to.path !== '/login') return '/login'
   document.title = to.meta.title || '我的博客'
-  next()
 })
 
 // 导出router
