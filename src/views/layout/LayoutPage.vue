@@ -71,11 +71,11 @@ const logout = async () => {
           <el-icon><PictureFilled /></el-icon>
           <template #title>照片</template>
         </el-menu-item>
-        <el-menu-item index="4">
+        <el-menu-item index="/notice">
           <el-icon><BellFilled /></el-icon>
           <template #title>通知</template>
         </el-menu-item>
-        <el-menu-item index="5">
+        <el-menu-item index="/setting">
           <el-icon><Tools /></el-icon>
           <template #title>设置</template>
         </el-menu-item>
@@ -345,6 +345,7 @@ body {
   height: auto;
   margin-left: 248px;
   width: calc(100vw - 248px);
+  background-color: #f0f0f0;
 }
 
 /* 设置顶部我的博客logo */

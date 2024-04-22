@@ -28,7 +28,6 @@ defineExpose({
 
 <style scoped>
 .box {
-  width: 440px;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -37,6 +37,50 @@ const router = createRouter({
           meta: {
             title: '照片墙'
           }
+        },
+        {
+          // 设置
+          path: '/setting',
+          name: 'settingPage',
+          component: () => import('@/views/setting/SettingPage.vue'),
+          children: [
+            {
+              // 基础信息
+              path: '/setting/baseInfo',
+              name: 'baseInfoPage',
+              component: () => import('@/views/setting/content/BaseInfoPage.vue'),
+              meta: {
+                title: '基础信息'
+              }
+            },
+            {
+              // 账户设置
+              path: '/setting/account',
+              name: 'accountPage',
+              component: () => import('@/views/setting/content/AccountPage.vue'),
+              meta: {
+                title: '账户设置'
+              }
+            },
+            {
+              // 邮件通知
+              path: '/setting/email',
+              name: 'emailPage',
+              component: () => import('@/views/setting/content/EmailPage.vue'),
+              meta: {
+                title: '邮件通知'
+              }
+            }
+          ]
+        },
+        {
+          // 通知
+          path: '/notice',
+          name: 'noticePage',
+          component: () => import('@/views/notice/NoticePage.vue'),
+          meta: {
+            title: '通知'
+          }
         }
       ]
     }
