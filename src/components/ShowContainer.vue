@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <!-- 设置里的展示块 -->
-  <el-card class="show-container">
+  <el-card class="show-container" shadow="never">
     <template #header>
       <div class="header">
         <span>{{ title }}</span>
@@ -22,11 +22,13 @@ defineProps({
 
 <style scoped>
 .show-container {
-  width: 648px;
-  border-radius: 8px;
+  width: 624px;
+  border-radius: 10px;
+  padding: 0 24px 24px 24px;
 }
 .header {
   height: 55px;
+  margin-left: -15px;
 }
 .header span {
   font-size: 20px;

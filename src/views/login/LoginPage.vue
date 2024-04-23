@@ -85,10 +85,13 @@ const login = async () => {
     username: loginForm.value.username,
     password: loginForm.value.password
   })
-  // 登录逻辑
-  ElMessage.success(`欢迎! ${res.data.nickname}`)
+  const { token, username, nickname, uid } = res.data
+  // 登录提示
+  ElMessage.success(`欢迎! ${nickname}`)
   // 储存token
-  userStore.setToken(res.data.token)
+  userStore.setToken(token)
+  // 存储用户信息
+  userStore.setUser({ username, nickname, uid })
   // 跳转到首页
   router.push('/')
 }

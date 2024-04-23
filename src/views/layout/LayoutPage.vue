@@ -84,7 +84,7 @@ const logout = async () => {
         <div class="user-info-module">
           <div class="user-info">
             <img src="@/assets/default.png" class="avatar" />
-            <div class="name">缺心远</div>
+            <div class="name">{{ userStore.user.nickname || userStore.user.username }}</div>
           </div>
           <div class="more-options">
             <div class="user-set" @click="changeOptionsBox">
