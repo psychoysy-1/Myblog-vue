@@ -85,13 +85,13 @@ const login = async () => {
     username: loginForm.value.username,
     password: loginForm.value.password
   })
-  const { token, username, nickname, uid } = res.data
+  const { token, username, nickname, _id, email, country, avatar } = res.data
   // 登录提示
   ElMessage.success(`欢迎! ${nickname}`)
   // 储存token
   userStore.setToken(token)
   // 存储用户信息
-  userStore.setUser({ username, nickname, uid })
+  userStore.setUser({ username, nickname, _id, email, country, avatar })
   // 跳转到首页
   router.push('/')
 }
@@ -124,7 +124,12 @@ watch(isSignUp, () => {
           </el-form-item>
           <el-form-item class="label" prop="password">
             <span>密码</span>
-            <el-input :prefix-icon="Lock" show-password v-model="loginForm.password"></el-input>
+            <el-input
+              :prefix-icon="Lock"
+              show-password
+              v-model="loginForm.password"
+              @keyup.enter="login"
+            ></el-input>
           </el-form-item>
           <el-form-item>
             <el-button class="login-btn submit" @click="login">登录</el-button>
@@ -194,7 +199,12 @@ watch(isSignUp, () => {
             </el-form-item>
             <el-form-item class="label" prop="redpassword">
               <span>确认密码</span>
-              <el-input v-model="regFrom.redpassword" :prefix-icon="Lock" show-password></el-input>
+              <el-input
+                v-model="regFrom.redpassword"
+                :prefix-icon="Lock"
+                show-password
+                @keyup.enter="register"
+              ></el-input>
             </el-form-item>
             <el-form-item>
               <el-button class="reg-btn submit" @click="register">注册</el-button>

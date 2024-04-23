@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { getUserInfoService } from '@/api/user'
 
 export const useUserStore = defineStore(
   'blog-user',
@@ -15,6 +16,11 @@ export const useUserStore = defineStore(
 
     // 配置用户信息
     const user = ref({})
+    const getUser = async () => {
+      const res = await getUserInfoService(user.value._id) //请求获取数据
+      console.log(res)
+      user.value = res.data.data
+    }
     const setUser = (newUser) => {
       user.value = newUser
     }
@@ -28,6 +34,7 @@ export const useUserStore = defineStore(
       setToken,
       removeToken,
       user,
+      getUser,
       setUser,
       removeUser
     }

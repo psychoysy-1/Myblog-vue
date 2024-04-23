@@ -22,13 +22,6 @@ const isCollapse = ref(false)
 const showOptionsBox = ref(false)
 const changeOptionsBox = () => {
   showOptionsBox.value = !showOptionsBox.value
-  if (showOptionsBox.value) {
-    // 显示弹框
-    document.querySelector('.options-box').style.display = 'block'
-  } else {
-    // 隐藏弹框
-    document.querySelector('.options-box').style.display = 'none'
-  }
 }
 
 // 显示微信弹窗
@@ -39,6 +32,7 @@ const showWechatDialog = () => {
 // 退出登录
 const logout = async () => {
   userStore.removeToken()
+  userStore.removeUser()
   router.push('/login')
 }
 </script>
@@ -83,7 +77,12 @@ const logout = async () => {
         <!-- 用户内容 -->
         <div class="user-info-module">
           <div class="user-info">
-            <img src="@/assets/default.png" class="avatar" />
+            <img
+              v-if="userStore.user.avatar"
+              class="avatar"
+              :src="`http://localhost:3000/${userStore.user.avatar}`"
+            />
+            <img v-else src="@/assets/default.png" class="avatar" />
             <div class="name">{{ userStore.user.nickname || userStore.user.username }}</div>
           </div>
           <div class="more-options">
@@ -102,7 +101,7 @@ const logout = async () => {
         <wechat-dialog ref="dialog"></wechat-dialog>
 
         <!-- 用户设置 -->
-        <div class="options-box">
+        <div class="options-box" v-show="showOptionsBox">
           <div class="theme-module">
             <span>主题设置:</span>
             <div class="change-theme">
@@ -169,7 +168,6 @@ body {
   border-radius: 4px;
   padding: 8px 0;
   z-index: 1; /* 确保弹框在用户信息模块上方 */
-  display: none; /* 默认隐藏 */
 
   .el-link.is-underline:hover::after,
   .el-link:hover {

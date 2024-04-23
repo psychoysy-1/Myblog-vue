@@ -25,6 +25,7 @@ defineProps({
   width: 624px;
   border-radius: 10px;
   padding: 0 24px 24px 24px;
+  margin-bottom: 20px;
 }
 .header {
   height: 55px;
