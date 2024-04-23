@@ -1,5 +1,5 @@
 <script setup></script>
 
 <template>
-  <div>邮件配置</div>
+  <show-container title="一般"></show-container>
 </template>

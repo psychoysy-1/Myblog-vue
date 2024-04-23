@@ -32,11 +32,10 @@ defineProps({
 }
 .card-header {
   font-size: 33px;
-  margin-top: 10px;
   font-weight: 400;
 }
 :deep(.el-card__header) {
   border-bottom: none;
-  padding: 30px 0 0 10px;
+  padding: 30px 0 0 14px;
 }
 </style>

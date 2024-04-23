@@ -43,6 +43,7 @@ const router = createRouter({
           path: '/setting',
           name: 'settingPage',
           component: () => import('@/views/setting/SettingPage.vue'),
+          redirect: '/setting/baseInfo',
           children: [
             {
               // 基础信息

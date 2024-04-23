@@ -34,6 +34,8 @@
         邮件通知
       </el-menu-item>
     </el-menu>
+    <!-- 下面内容 -->
+    <router-view></router-view>
   </page-container>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup></script>
 
 <template>
-  <div>账户信息</div>
+  <show-container title="登录"></show-container>
 </template>

@@ -1,5 +1,5 @@
 <script setup></script>
 
 <template>
-  <div>基础信息</div>
+  <show-container title="个人资料信息"></show-container>
 </template>
