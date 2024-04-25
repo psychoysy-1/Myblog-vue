@@ -71,6 +71,15 @@ const router = createRouter({
               meta: {
                 title: '邮件通知'
               }
+            },
+            {
+              //订阅
+              path: '/setting/subscribe',
+              name: 'subscribePage',
+              component: () => import('@/views/setting/content/SubscribePage.vue'),
+              meta: {
+                title: '订阅'
+              }
             }
           ]
         },

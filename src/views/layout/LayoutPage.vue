@@ -129,7 +129,7 @@ const logout = async () => {
 </template>
 
 <style>
-body {
+* {
   margin: 0;
   padding: 0;
 }

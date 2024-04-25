@@ -7,7 +7,8 @@ const baseURL = 'http://localhost:3000/api'
 const instance = axios.create({
   // TODO 1. 基础地址，超时时间
   baseURL,
-  timeout: 5000
+  timeout: 5000,
+  withCredentials: true // 允许携带 cookie
 })
 
 instance.interceptors.request.use(

@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { InfoFilled } from '@element-plus/icons-vue'
+import { getCaptchaService, updatePasswordService } from '@/api/user'
+import { useUserStore } from '@/stores'
 
 // 语言
 const languages = [
@@ -14,20 +16,71 @@ const selectedLanguages = ref([])
 // 隐私按钮
 const btn1 = ref(false)
 const btn2 = ref(false)
+
+// 获取验证码图片数据
+const code = ref('')
+const getCode = async () => {
+  const res = await getCaptchaService()
+  code.value = res.data.data.base64
+}
+getCode()
+
+// 修改密码
+const form = ref({
+  newPassword: '',
+  reNewPassword: '',
+  captcha: ''
+})
+const userStore = useUserStore()
+const _id = ref(userStore.user._id)
+const changePassword = async () => {
+  await updatePasswordService({
+    captcha: form.value.captcha,
+    newPassword: form.value.newPassword,
+    _id: _id.value
+  })
+  ElMessage.success({ message: '密码修改成功' })
+  form.value = {}
+  getCode()
+}
 </script>
 
 <template>
   <show-container title="登录">
-    <el-form class="login-form">
+    <el-form class="login-form" v-model="form">
+      <el-form-item>
+        <div class="form">
+          <span>验证码</span>
+          <div class="code">
+            <img :src="code" @click="getCode()" />
+            <el-input
+              size="large"
+              placeholder="请输入验证码"
+              style="width: 521px"
+              v-model="form.captcha"
+            ></el-input>
+          </div>
+        </div>
+      </el-form-item>
       <el-form-item>
         <span>密码</span>
-        <el-input type="password" size="large"></el-input>
+        <el-input
+          type="password"
+          size="large"
+          placeholder="请输入密码"
+          v-model="form.newPassword"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <span>确认密码</span>
-        <el-input type="password" size="large"></el-input>
+        <el-input
+          type="password"
+          size="large"
+          placeholder="请确认密码"
+          v-model="form.reNewPassword"
+        ></el-input>
       </el-form-item>
-      <el-button type="info">设置密码</el-button>
+      <el-button type="info" @click="changePassword">设置密码</el-button>
     </el-form>
     <div class="check">
       <span>双重验证</span>
@@ -153,8 +206,21 @@ const btn2 = ref(false)
   margin-bottom: 10px;
   font-size: 14px;
 }
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 .check span {
   margin-right: 5px;
+}
+.code {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.code img {
+  cursor: pointer;
 }
 
 /* 邮寄地址 */

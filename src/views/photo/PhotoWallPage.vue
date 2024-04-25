@@ -10,19 +10,22 @@ const randomRotate = () => {
     rotations.value[index] = randomAngle
   })
 }
+const loading = ref(false)
 
 // 获取图片地址并存入photo
 const photo = ref([])
 const getPhotoWall = async () => {
+  loading.value = true
   const res = await getPhotoWallService()
   photo.value = res.data.data
   randomRotate()
+  loading.value = false
 }
 getPhotoWall()
 </script>
 
 <template>
-  <div class="photowall">
+  <div class="photowall" v-loading="loading">
     <div class="image-container" v-for="(item, index) in photo" :key="index">
       <img
         :src="`http://localhost:3000${item.imageUrl}`"

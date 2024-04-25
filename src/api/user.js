@@ -10,6 +10,10 @@ export const userLoginService = (params) => request.get('/users/login', { params
 export const userUpdateService = (data) => request.put('/userInfo', data)
 
 // 获取用户信息接口
-export const getUserInfoService = (query) => {
-  return request.get('/userInfo' + `/?userId=${query}`)
-}
+export const getUserInfoService = (query) => request.get('/userInfo' + `/?userId=${query}`)
+
+// 获取验证码
+export const getCaptchaService = () => request.get('/userInfo/captcha')
+
+// 修改密码
+export const updatePasswordService = (data) => request.put('/userInfo/password', data)

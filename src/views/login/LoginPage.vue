@@ -228,11 +228,15 @@ watch(isSignUp, () => {
 *:after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 </style>
 
 <style scoped>
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
 .body {
   width: 100%;
   height: 100vh;
