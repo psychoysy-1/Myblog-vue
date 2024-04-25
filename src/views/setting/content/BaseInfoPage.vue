@@ -39,6 +39,7 @@ if (avatar.value) {
 const uploadRef = ref()
 // 加载中
 const loading = ref(false)
+// 提供变量做base64预览图片地址
 
 // 设置表单
 const form = ref({
@@ -52,6 +53,16 @@ const form = ref({
 // 上传图片时候的回调函数
 const OnSelectFile = (uploadFile) => {
   form.value.avatar = uploadFile.raw
+  const reader = new FileReader()
+  reader.onload = () => {
+    imageUrl.value = reader.result
+  }
+  reader.readAsDataURL(uploadFile.raw)
+}
+
+// 多次上传文件进行提示
+const handleExceed = () => {
+  ElMessage.error('只能上传一个文件')
 }
 
 // 邮箱格式校验
@@ -89,6 +100,7 @@ const handleSave = async () => {
             ref="uploadRef"
             :auto-upload="false"
             :on-change="OnSelectFile"
+            :on-exceed="handleExceed"
             :limit="1"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar" />
