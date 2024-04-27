@@ -18,8 +18,10 @@ export const useUserStore = defineStore(
     const user = ref({})
     const getUser = async () => {
       const res = await getUserInfoService(user.value._id) //请求获取数据
-      console.log(res)
-      user.value = res.data.data
+      user.value.avatar = res.data.data.avatar
+      user.value.nickname = res.data.data.nickname
+      user.value.email = res.data.data.email
+      user.value.country = res.data.data.country
     }
     const setUser = (newUser) => {
       user.value = newUser

@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import { useUserStore } from '@/stores'
 import { uploadBgService } from '@/api/user'
+import PublishBlog from './components/PublishEdit.vue'
+import { Edit } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 // 获取用户id
 const userStore = useUserStore()
@@ -13,7 +16,7 @@ const _id = ref(userStore.user._id)
 // 背景图片
 let bgImg = ref('')
 if (userStore.user.blogBackground) {
-  bgImg = ref(`http://localhost:3000/${userStore.user.blogBackground}`)
+  bgImg = ref(`http://localhost:3000${userStore.user.blogBackground}`)
 }
 // 创建一个文件选择器
 const uploadImage = () => {
@@ -32,6 +35,7 @@ const handleFileUpload = async (event) => {
   const res = await uploadBgService(formData)
   console.log(res)
   userStore.user.blogBackground = res.data.data.blogBackground
+  ElMessage.success('上传成功')
   if (file) {
     // 将文件转换为 base64 编码
     const reader = new FileReader()
@@ -48,6 +52,18 @@ const signature = ref('请填写个性签名')
 const toggleEdit = () => {
   isEditing.value = !isEditing.value
 }
+
+// 发布博客
+// 按钮颜色
+const color = ref('#24BA88')
+color.value = localStorage.getItem('color')
+const BtnColorChange = () => {
+  localStorage.setItem('color', color.value)
+}
+const blogDrawer = ref()
+const publish = () => {
+  blogDrawer.value.open()
+}
 </script>
 
 <template>
@@ -61,12 +77,18 @@ const toggleEdit = () => {
     <div v-else class="upload">请上传你的背景图片</div>
   </div>
 
-  <!-- 发表文章按钮 -->
+  <!-- 发布博客按钮 -->
   <div class="publish">
-    <el-button size="large">发表文章</el-button>
+    <el-color-picker v-model="color" size="large" @change="BtnColorChange" />
+    <el-button size="large" type="primary" @click="publish" :icon="Edit" :color="color"
+      >发布博客</el-button
+    >
   </div>
 
-  <!-- 用户头像 -->
+  <!-- 发布博客抽屉 -->
+  <publish-blog ref="blogDrawer"></publish-blog>
+
+  <!-- 用户头像及签名 -->
   <div class="user">
     <div class="user-avatar">
       <img :src="`http://localhost:3000/${userStore.user.avatar}`" />
@@ -90,7 +112,7 @@ const toggleEdit = () => {
 .publish {
   display: flex;
   justify-content: flex-end;
-  margin: 5px;
+  margin: 10px;
 }
 
 /* 设置用户头像 */
@@ -100,7 +122,7 @@ const toggleEdit = () => {
   align-items: center;
   justify-content: center;
   transform: translateY(-62%);
-  width: 600px;
+  width: 400px;
   margin: 0 auto;
 }
 .user-avatar img {
@@ -116,11 +138,12 @@ const toggleEdit = () => {
   font-size: 14px;
   font-weight: 100;
   color: rgb(104, 104, 103);
+  cursor: pointer;
 }
 
 /* 设置顶部背景 */
 .blog-background {
-  height: 434px;
+  height: 414px;
   overflow: hidden;
   cursor: pointer;
 }

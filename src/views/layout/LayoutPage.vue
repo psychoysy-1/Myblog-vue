@@ -63,7 +63,7 @@ const logout = async () => {
         </el-menu-item>
         <el-menu-item index="/photoWall">
           <el-icon><PictureFilled /></el-icon>
-          <template #title>照片</template>
+          <template #title>照片墙</template>
         </el-menu-item>
         <el-menu-item index="/notice">
           <el-icon><BellFilled /></el-icon>
