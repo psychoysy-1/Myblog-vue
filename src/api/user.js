@@ -17,3 +17,6 @@ export const getCaptchaService = () => request.get('/userInfo/captcha')
 
 // 修改密码
 export const updatePasswordService = (data) => request.put('/userInfo/password', data)
+
+// 上传博客背景图
+export const uploadBgService = (data) => request.post('/userBlogBackground', data)

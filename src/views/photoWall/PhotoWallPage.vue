@@ -43,6 +43,7 @@ getPhotoWall()
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin: 20px;
 }
 
 .image-container {

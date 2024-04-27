@@ -31,24 +31,56 @@ const form = ref({
   reNewPassword: '',
   captcha: ''
 })
+const rules = ref({
+  newPassword: [
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+    { min: 6, max: 20, message: '密码长度在 6 到 20 个字符', trigger: 'blur' }
+  ],
+  reNewPassword: [
+    { required: true, message: '请确认新密码', trigger: 'blur' },
+    { min: 6, max: 20, message: '密码长度在 6 到 20 个字符', trigger: 'blur' },
+    {
+      validator: (rule, value, callback) => {
+        if (value !== form.value.newPassword) {
+          callback(new Error('两次输入的密码不一致!'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
+  ],
+  captcha: [
+    { required: true, message: '请输入验证码', trigger: 'blur' },
+    { min: 4, max: 4, message: '验证码长度为 4', trigger: 'blur' }
+  ]
+})
 const userStore = useUserStore()
 const _id = ref(userStore.user._id)
 const changePassword = async () => {
+  if (!form.value.newPassword || !form.value.reNewPassword || !form.value.captcha) {
+    ElMessage.error({ message: '请填写完整信息' })
+    return
+  }
   await updatePasswordService({
     captcha: form.value.captcha,
     newPassword: form.value.newPassword,
     _id: _id.value
   })
   ElMessage.success({ message: '密码修改成功' })
-  form.value = {}
+  form.value = {
+    newPassword: '',
+    reNewPassword: '',
+    captcha: ''
+  }
   getCode()
 }
 </script>
 
 <template>
   <show-container title="登录">
-    <el-form class="login-form" v-model="form">
-      <el-form-item>
+    <el-form class="login-form" v-model="form" :rules="rules">
+      <el-form-item prop="captcha">
         <div class="form">
           <span>验证码</span>
           <div class="code">
@@ -62,7 +94,7 @@ const changePassword = async () => {
           </div>
         </div>
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="newPassword">
         <span>密码</span>
         <el-input
           type="password"
@@ -71,7 +103,7 @@ const changePassword = async () => {
           v-model="form.newPassword"
         ></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="reNewPassword">
         <span>确认密码</span>
         <el-input
           type="password"
@@ -80,7 +112,9 @@ const changePassword = async () => {
           v-model="form.reNewPassword"
         ></el-input>
       </el-form-item>
-      <el-button type="info" @click="changePassword">设置密码</el-button>
+      <el-form-item>
+        <el-button type="info" @click="changePassword">设置密码</el-button>
+      </el-form-item>
     </el-form>
     <div class="check">
       <span>双重验证</span>
@@ -197,7 +231,6 @@ const changePassword = async () => {
 /* 登录 */
 .login-form {
   border-bottom: 1px solid #f0f0f0;
-  padding-bottom: 20px;
 }
 .check {
   display: flex;

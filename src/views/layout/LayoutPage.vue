@@ -51,7 +51,7 @@ const logout = async () => {
         </div>
 
         <!-- 菜单 -->
-        <el-menu-item index="1">
+        <el-menu-item index="/myBlog">
           <template #title>
             <el-icon><Management /></el-icon>
             <span>我的博客</span>
@@ -342,8 +342,8 @@ const logout = async () => {
 .el-main {
   height: auto;
   margin-left: 248px;
-  width: calc(100vw - 248px);
   background-color: #f0f0f0;
+  padding: 0;
 }
 
 /* 设置顶部我的博客logo */

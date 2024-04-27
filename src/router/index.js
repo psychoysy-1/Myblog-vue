@@ -30,10 +30,19 @@ const router = createRouter({
           }
         },
         {
+          // 我的博客
+          path: '/myBlog',
+          name: 'myBlogPage',
+          component: () => import('@/views/blog/MyBlogPage.vue'),
+          meta: {
+            title: '我的博客'
+          }
+        },
+        {
           // 照片墙
           path: '/photoWall',
           name: 'photoWallPage',
-          component: () => import('@/views/photo/PhotoWallPage.vue'),
+          component: () => import('@/views/photoWall/PhotoWallPage.vue'),
           meta: {
             title: '照片墙'
           }
