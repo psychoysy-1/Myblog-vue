@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useUserStore } from '@/stores'
 import { uploadBgService } from '@/api/user'
 import PublishBlog from './components/PublishEdit.vue'
@@ -48,11 +48,16 @@ const handleFileUpload = async (event) => {
 
 // 个性签名
 const isEditing = ref(false)
+const signatureRef = ref('')
 const signature = ref('请填写个性签名')
 const toggleEdit = () => {
   isEditing.value = !isEditing.value
+  if (isEditing.value) {
+    nextTick(() => {
+      signatureRef.value.focus()
+    })
+  }
 }
-
 // 发布博客
 // 按钮颜色
 const color = ref('#24BA88')
@@ -96,6 +101,7 @@ const publish = () => {
     <span>{{ userStore.user.nickname }}</span>
     <el-input
       v-if="isEditing"
+      ref="signatureRef"
       v-model="signature"
       @blur="toggleEdit"
       size="small"
@@ -123,7 +129,7 @@ const publish = () => {
   justify-content: center;
   transform: translateY(-62%);
   width: 400px;
-  margin: 0 auto;
+  margin: 0 auto 30px;
 }
 .user-avatar img {
   width: 120px;

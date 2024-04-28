@@ -35,6 +35,12 @@ const logout = async () => {
   userStore.removeUser()
   router.push('/login')
 }
+
+// 导航条滑入动画
+const isAsideShow = ref(false)
+setInterval(() => {
+  isAsideShow.value = true
+}, 20)
 </script>
 
 <template>
@@ -44,32 +50,32 @@ const logout = async () => {
       <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" router>
         <!-- 图标和首页 -->
         <div class="el-aside-home">
-          <a href="/home">
+          <el-link href="/home" :underline="false">
             <img src="@/assets/logo.png" alt="" />
             <span>My Blog</span>
-          </a>
+          </el-link>
         </div>
 
         <!-- 菜单 -->
-        <el-menu-item index="/myBlog">
+        <el-menu-item index="/myBlog" :class="{ show: isAsideShow }">
           <template #title>
             <el-icon><Management /></el-icon>
             <span>我的博客</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="2">
+        <el-menu-item index="2" :class="{ show: isAsideShow }" class="delay2">
           <el-icon><List /></el-icon>
           <template #title>博客分类</template>
         </el-menu-item>
-        <el-menu-item index="/photoWall">
+        <el-menu-item index="/photoWall" :class="{ show: isAsideShow }" class="delay3">
           <el-icon><PictureFilled /></el-icon>
           <template #title>照片墙</template>
         </el-menu-item>
-        <el-menu-item index="/notice">
+        <el-menu-item index="/notice" :class="{ show: isAsideShow }" class="delay4">
           <el-icon><BellFilled /></el-icon>
           <template #title>通知</template>
         </el-menu-item>
-        <el-menu-item index="/setting">
+        <el-menu-item index="/setting" :class="{ show: isAsideShow }" class="delay5">
           <el-icon><Tools /></el-icon>
           <template #title>设置</template>
         </el-menu-item>
@@ -303,6 +309,8 @@ const logout = async () => {
 .el-menu-item {
   margin: 10px 10px;
   border-radius: 10px; /* 设置圆角半径 */
+  transition: all 0.8s ease-in-out;
+  transform: translateX(-100%);
 
   &.is-active {
     background-color: #e8e8e8; /* 设置背景颜色 */
@@ -312,6 +320,21 @@ const logout = async () => {
   &:hover {
     background-color: #e8e8e8; /* 设置鼠标移上去的背景颜色 */
   }
+}
+.el-menu-item.show {
+  transform: translateX(0);
+}
+.delay2 {
+  transition-delay: 60ms;
+}
+.delay3 {
+  transition-delay: 120ms;
+}
+.delay4 {
+  transition-delay: 180ms;
+}
+.delay5 {
+  transition-delay: 240ms;
 }
 
 /* 导航条设置 */
@@ -350,11 +373,11 @@ const logout = async () => {
 .el-aside-home {
   height: 68px;
 
-  a {
+  .el-link {
     text-decoration: none;
     color: inherit;
     display: block;
-    padding: 18px 0 18px 40px;
+    height: 100%;
     display: flex;
     align-items: center;
 
