@@ -1,16 +1,17 @@
 <script setup>
 import MusicComponent from './components/MusicPart.vue'
+import ClockComponent from './components/EarthPart.vue'
 </script>
 
 <template>
   <div class="homePage">
     <div class="top">
       <MusicComponent class="component1" />
-      <div class="music component4">没想好</div>
-      <div class="clock component1">图像</div>
+      <div class="component4">没想好</div>
+      <div class="component1">图像</div>
     </div>
     <div class="bottom">
-      <div class="component2">a</div>
+      <ClockComponent class="component2" />
       <div class="music component3">3</div>
     </div>
   </div>
@@ -49,7 +50,6 @@ import MusicComponent from './components/MusicPart.vue'
   width: 18.5vw;
   height: 18.5vw;
   border-radius: 10px;
-  background-color: green;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   transition: transform 0.6s ease;
 }
@@ -68,15 +68,5 @@ import MusicComponent from './components/MusicPart.vue'
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   transition: transform 0.6s ease;
-}
-
-.music {
-  background-color: #fff;
-}
-.clock {
-  background-color: #f00;
-}
-.a {
-  background-color: blue;
 }
 </style>

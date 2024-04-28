@@ -16,6 +16,8 @@
     "@element-plus/icons-vue": "^2.3.1",
     "@vueup/vue-quill": "^1.2.0",
     "axios": "^1.6.8",
+    "echarts": "^5.5.0",
+    "echarts-gl": "^2.0.9",
     "element-plus": "^2.7.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",

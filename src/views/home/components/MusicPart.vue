@@ -94,7 +94,7 @@ const togglePlay = () => {
   width: 16vw;
   height: 49vh;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: #6449dd;
 }
 
 .music {
