@@ -1,13 +1,14 @@
 <script setup>
 import MusicComponent from './components/MusicPart.vue'
 import ClockComponent from './components/EarthPart.vue'
+import NeonComponent from './components/NeonPart.vue'
 </script>
 
 <template>
   <div class="homePage">
     <div class="top">
       <MusicComponent class="component1" />
-      <div class="component4">没想好</div>
+      <NeonComponent class="component4" />
       <div class="component1">图像</div>
     </div>
     <div class="bottom">
@@ -35,6 +36,8 @@ import ClockComponent from './components/EarthPart.vue'
 .component1 {
   width: 16vw;
   height: 49vh;
+  min-width: 220px;
+  min-height: 350px;
   border-radius: 8px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   transition: transform 0.6s ease;
@@ -49,6 +52,8 @@ import ClockComponent from './components/EarthPart.vue'
 .component2 {
   width: 18.5vw;
   height: 18.5vw;
+  min-width: 260px;
+  min-height: 260px;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   transition: transform 0.6s ease;

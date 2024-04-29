@@ -3,8 +3,9 @@ import { ref, nextTick } from 'vue'
 import { useUserStore } from '@/stores'
 import { uploadBgService } from '@/api/user'
 import PublishBlog from './components/PublishEdit.vue'
-import { Edit } from '@element-plus/icons-vue'
+import { Edit, Search, Expand, Fold } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import BlogContent from './components/BlogContent.vue'
 
 // 获取用户id
 const userStore = useUserStore()
@@ -69,6 +70,30 @@ const blogDrawer = ref()
 const publish = () => {
   blogDrawer.value.open()
 }
+
+// 排序按钮
+const isSort = ref(false)
+const toggleSort = () => {
+  isSort.value = !isSort.value
+}
+
+// 博客渲染
+const articles = ref([
+  {
+    title: 'Article 1fsafjhasdgaskgjaslgjsdalgjasdlfasdjflasdlf',
+    content:
+      '我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波'
+  },
+  {
+    title: 'Article 2',
+    content: 'This is the content of Article 2.'
+  },
+  {
+    title: 'Article 3',
+    content:
+      'This is the content of Articascjmllllllllllllllllllllllllllfkdsjflkdfakldsjfgladsjflsadle 3.'
+  }
+])
 </script>
 
 <template>
@@ -111,9 +136,82 @@ const publish = () => {
     />
     <p @dblclick="toggleEdit" v-else>{{ isEditing ? signature : '请填写你的个性签名' }}</p>
   </div>
+
+  <!-- 筛选区域 -->
+  <div class="filter">
+    <div class="filterIntro">
+      <span>缺心远的帖子</span>
+    </div>
+    <div class="filterArea">
+      <el-select placeholder="帖子类型" class="type" size="large"></el-select>
+      <el-select placeholder="日期" size="large"></el-select>
+      <el-button size="large" @click="toggleSort">
+        <div class="icon-wrapper">
+          <el-icon v-if="isSort" size="large"><Expand /></el-icon>
+          <el-icon v-else size="large"><Fold /></el-icon>
+        </div>
+      </el-button>
+      <el-input placeholder="搜索帖子" :prefix-icon="Search" size="large"> </el-input>
+    </div>
+  </div>
+
+  <!-- 博客列表 -->
+  <div class="blogList">
+    <blog-content
+      v-for="(article, index) in articles"
+      :key="index"
+      :article="article"
+    ></blog-content>
+  </div>
 </template>
 
 <style scoped>
+/* 博客内容区域 */
+.blogList {
+  width: 900px;
+  margin: 0 auto 40px;
+}
+.blog-content {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+  margin: 0 auto 20px;
+}
+
+/* 筛选区域 */
+.filter {
+  border-top: 1px solid #c0c0c0;
+  padding-top: 20px;
+  transform: translateY(-35%);
+}
+.filter .filterIntro {
+  width: 900px;
+  margin: 10px auto 0;
+  font-size: 26px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+.filterArea {
+  width: 900px;
+  display: flex;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+.el-select,
+.el-input,
+.el-button {
+  margin: 0 5px;
+}
+.el-input {
+  width: 1800px;
+}
+
+/* 旋转筛选按钮 */
+.icon-wrapper {
+  transform: rotate(90deg); /* 旋转90度 */
+}
+
 /* 设置发布文章按钮 */
 .publish {
   display: flex;
@@ -127,9 +225,9 @@ const publish = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transform: translateY(-62%);
   width: 400px;
-  margin: 0 auto 30px;
+  margin: 0 auto;
+  transform: translateY(-70%);
 }
 .user-avatar img {
   width: 120px;
