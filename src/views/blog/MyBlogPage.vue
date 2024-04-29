@@ -6,10 +6,12 @@ import PublishBlog from './components/PublishEdit.vue'
 import { Edit, Search, Expand, Fold } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import BlogContent from './components/BlogContent.vue'
+import { blogGetListService } from '@/api/blog'
 
 // 获取用户id
 const userStore = useUserStore()
-const _id = ref(userStore.user._id)
+const _id = userStore.user._id
+const nickname = userStore.user.nickname
 
 // 加载
 // const loading = ref(false)
@@ -75,25 +77,34 @@ const publish = () => {
 const isSort = ref(false)
 const toggleSort = () => {
   isSort.value = !isSort.value
+  articles.value = articles.value.reverse()
 }
 
 // 博客渲染
-const articles = ref([
-  {
-    title: 'Article 1fsafjhasdgaskgjaslgjsdalgjasdlfasdjflasdlf',
-    content:
-      '我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波我是你的你是我的谁,who knows是,我是大傻波'
-  },
-  {
-    title: 'Article 2',
-    content: 'This is the content of Article 2.'
-  },
-  {
-    title: 'Article 3',
-    content:
-      'This is the content of Articascjmllllllllllllllllllllllllllfkdsjflkdfakldsjfgladsjflsadle 3.'
-  }
-])
+const articles = ref([])
+
+// 获取博客列表
+const loading = ref(false)
+const formData = {
+  author: _id
+  // tag: 'your-tag',
+  // year: 2023,
+  // order: '1',
+  // search: 'your-search-keyword'
+}
+const getArticles = async () => {
+  loading.value = true
+  const res = await blogGetListService(formData)
+  articles.value = res.data.articles.reverse()
+  console.log(articles.value)
+  loading.value = false
+}
+getArticles()
+
+// 发布博客后重新拉取并渲染
+const reGet = () => {
+  getArticles()
+}
 </script>
 
 <template>
@@ -116,7 +127,7 @@ const articles = ref([
   </div>
 
   <!-- 发布博客抽屉 -->
-  <publish-blog ref="blogDrawer"></publish-blog>
+  <publish-blog ref="blogDrawer" @published="reGet"></publish-blog>
 
   <!-- 用户头像及签名 -->
   <div class="user">
@@ -140,7 +151,7 @@ const articles = ref([
   <!-- 筛选区域 -->
   <div class="filter">
     <div class="filterIntro">
-      <span>缺心远的帖子</span>
+      <span>{{ nickname }}的帖子</span>
     </div>
     <div class="filterArea">
       <el-select placeholder="帖子类型" class="type" size="large"></el-select>
@@ -156,12 +167,8 @@ const articles = ref([
   </div>
 
   <!-- 博客列表 -->
-  <div class="blogList">
-    <blog-content
-      v-for="(article, index) in articles"
-      :key="index"
-      :article="article"
-    ></blog-content>
+  <div class="blogList" v-loading="loading">
+    <blog-content v-for="article in articles" :key="article._id" :article="article"></blog-content>
   </div>
 </template>
 

@@ -10,18 +10,28 @@ defineProps({
 })
 // 获取主题色
 const color = localStorage.getItem('color')
+
+// 格式化日期
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return `${year}年${month}月${day}日`
+}
 </script>
 
 <template>
   <div class="blog-content">
     <div class="left">
-      <img src="@/assets/bg.jpg" alt="" />
+      <img v-if="article.imageUrl" :src="`http://localhost:3000/${article.imageUrl[0]}`" alt="" />
+      <img v-else src="@/assets/default.png" alt="" />
     </div>
     <div class="right">
       <div class="tag">
         <div class="custom-tag">
           <el-icon class="icon"><Clock /></el-icon>
-          <span>2024年4月29日</span>
+          <span>{{ formatDate(article.createdAt) }}</span>
         </div>
       </div>
       <div class="title">
@@ -29,24 +39,30 @@ const color = localStorage.getItem('color')
       </div>
       <div class="introduce">
         <div class="author box">
-          <img src="@/assets/default.png" alt="" />
+          <img
+            v-if="article.author && article.author.avatar"
+            :src="`http://localhost:3000/${article.author.avatar}`"
+            alt="Author Avatar"
+          />
           <el-text>111</el-text>
         </div>
         <div class="views box">
           <el-icon><View /></el-icon>
-          <el-text>1000热度</el-text>
+          <el-text>{{ article.views }}热度</el-text>
         </div>
         <div class="comment box">
           <el-icon><ChatRound /></el-icon>
-          <el-text> 100条评论 </el-text>
+          <el-text> {{ article.commentCount }}条评论 </el-text>
         </div>
         <div class="tagName box">
           <el-icon><Files /></el-icon>
-          <el-text> 标签 </el-text>
+          <el-text v-if="article.tags">{{ article.tags[0] }}</el-text>
         </div>
       </div>
       <div class="content">
-        <el-text line-clamp="5">{{ article.content }}</el-text>
+        <el-text line-clamp="5">
+          <div v-html="article.content"></div>
+        </el-text>
       </div>
     </div>
   </div>
@@ -105,6 +121,7 @@ const color = localStorage.getItem('color')
 }
 .introduce img {
   width: 20px;
+  border-radius: 50%;
 }
 .introduce .box {
   margin-right: 10px;

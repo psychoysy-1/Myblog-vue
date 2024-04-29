@@ -51,6 +51,7 @@ const handleClose = (tag) => {
 
 // 图片相关
 const uploadedFiles = ref([]) //上传的文件列表
+const uploadRef = ref(null)
 const onSelectFile = (uploadFile) => {
   uploadedFiles.value.push(uploadFile)
 }
@@ -64,18 +65,23 @@ const content = ref('')
 const publish = async () => {
   const formData = new FormData()
   formData.append('title', title.value)
-  formData.append('author', _id)
-  formData.append('tags', JSON.stringify(dynamicTags.value))
+  formData.append('uid', _id)
+  formData.append('tags', dynamicTags.value)
   formData.append('content', content.value)
   uploadedFiles.value.forEach((file) => {
     formData.append('blogImages', file.raw, file.name)
   })
   const res = await blogPublishService(formData)
-  console.log(res)
   if (res.status === 200) {
     ElMessage.success('发布成功')
+    visibleDrawer.value = false
+    closeDrawer()
+    emit('published')
   }
 }
+
+// 通知父组件发布完成
+const emit = defineEmits(['published'])
 
 // 打开发布的抽屉
 const open = () => {
@@ -85,6 +91,7 @@ const open = () => {
 const closeDrawer = () => {
   title.value = ''
   dynamicTags.value = []
+  uploadRef.value.clearFiles()
   editorRef.value.setHTML('')
 }
 defineExpose({
@@ -142,7 +149,14 @@ defineExpose({
       </el-form-item>
       <!-- 上传照片 -->
       <el-form-item>
-        <el-upload class="upload-demo" drag multiple :auto-upload="false" :on-change="onSelectFile">
+        <el-upload
+          class="upload-demo"
+          ref="uploadRef"
+          drag
+          multiple
+          :auto-upload="false"
+          :on-change="onSelectFile"
+        >
           <el-icon class="el-icon--upload"><upload-filled /></el-icon>
           <div class="el-upload__text">拖动图片到这里或 <em>点击上传</em></div>
           <template #tip>
