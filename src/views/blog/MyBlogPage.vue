@@ -13,9 +13,6 @@ const userStore = useUserStore()
 const _id = ref(userStore.user._id)
 const nickname = userStore.user.nickname
 
-// 加载
-// const loading = ref(false)
-
 // 背景图片
 let bgImg = ref('')
 if (userStore.user.blogBackground) {
@@ -81,11 +78,12 @@ const saveData = async () => {
   ElMessage.success('修改签名成功')
 }
 
-// 发布博客 的按钮颜色
+// 发布博客 按钮颜色设置
 const color = ref('#24BA88')
 color.value = localStorage.getItem('color')
 const BtnColorChange = () => {
   localStorage.setItem('color', color.value)
+  reGet()
 }
 const blogDrawer = ref()
 const publish = () => {

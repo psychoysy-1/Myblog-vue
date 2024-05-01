@@ -44,7 +44,7 @@ const formatDate = (dateString) => {
             :src="`http://localhost:3000/${article.author.avatar}`"
             alt="Author Avatar"
           />
-          <el-text>111</el-text>
+          <el-text>{{ article.author.nickname }}</el-text>
         </div>
         <div class="views box">
           <el-icon><View /></el-icon>
