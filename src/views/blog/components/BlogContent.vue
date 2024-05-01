@@ -112,6 +112,7 @@ const formatDate = (dateString) => {
 .title .el-text:hover {
   color: v-bind(color);
   cursor: default;
+  cursor: pointer;
 }
 
 /* 作者、浏览量、评论、标签 */

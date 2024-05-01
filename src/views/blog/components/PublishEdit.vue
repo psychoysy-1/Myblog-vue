@@ -5,6 +5,7 @@ import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { useUserStore } from '@/stores'
 import { blogPublishService } from '@/api/blog'
+import { ElNotification } from 'element-plus'
 
 // 获取用户id
 const userStore = useUserStore()
@@ -68,6 +69,34 @@ const publish = async () => {
   formData.append('uid', _id)
   formData.append('tags', dynamicTags.value)
   formData.append('content', content.value)
+  if (!title.value) {
+    ElNotification({
+      title: '提示',
+      message: '请填写标题',
+      type: 'warning',
+      showClose: false,
+      duration: 2000
+    })
+    return
+  } else if (uploadedFiles.value.length === 0) {
+    ElNotification({
+      title: '提示',
+      message: '请上传图片',
+      type: 'warning',
+      showClose: false,
+      duration: 2000
+    })
+    return
+  } else if (content.value.trim() === '') {
+    ElNotification({
+      title: '提示',
+      message: '请填写内容',
+      type: 'warning',
+      showClose: false,
+      duration: 2000
+    })
+    return
+  }
   uploadedFiles.value.forEach((file) => {
     formData.append('blogImages', file.raw, file.name)
   })

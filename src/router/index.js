@@ -39,6 +39,12 @@ const router = createRouter({
           }
         },
         {
+          // 博客细节
+          path: '/blogDetail',
+          name: 'blogDetailPage',
+          component: () => import('@/views/blog/BlogDetailPage.vue')
+        },
+        {
           // 照片墙
           path: '/photoWall',
           name: 'photoWallPage',

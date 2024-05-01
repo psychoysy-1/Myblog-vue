@@ -240,6 +240,9 @@ const reGet = () => {
   <div class="blogList" v-loading="loading">
     <blog-content v-for="article in articles" :key="article._id" :article="article"></blog-content>
   </div>
+
+  <!-- 回到顶部 -->
+  <el-backtop :right="100" :bottom="100" />
 </template>
 
 <style scoped>
