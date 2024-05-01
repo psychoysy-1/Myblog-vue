@@ -109,7 +109,7 @@ defineExpose({
   >
     <el-form>
       <!-- 标题 -->
-      <el-form-item label="博客标题">
+      <el-form-item label="博客标题" prop="title">
         <el-input
           placeholder="请为你的博客写一个标题"
           size="large"

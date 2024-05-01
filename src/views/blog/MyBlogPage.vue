@@ -1,7 +1,7 @@
 <script setup>
 import { ref, nextTick } from 'vue'
 import { useUserStore } from '@/stores'
-import { uploadBgService } from '@/api/user'
+import { uploadBgService, userUpdateService } from '@/api/user'
 import PublishBlog from './components/PublishEdit.vue'
 import { Edit, Search, Expand, Fold } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
@@ -10,7 +10,7 @@ import { blogGetListService } from '@/api/blog'
 
 // 获取用户id
 const userStore = useUserStore()
-const _id = userStore.user._id
+const _id = ref(userStore.user._id)
 const nickname = userStore.user.nickname
 
 // 加载
@@ -52,8 +52,9 @@ const handleFileUpload = async (event) => {
 // 个性签名
 const isEditing = ref(false)
 const signatureRef = ref('')
-const signature = ref('请填写个性签名')
-const toggleEdit = () => {
+const signature = ref(userStore.user.signature || '请填写你的个性签名')
+// 切换状态并重新获取焦点
+const toggleEdit = async () => {
   isEditing.value = !isEditing.value
   if (isEditing.value) {
     nextTick(() => {
@@ -61,6 +62,17 @@ const toggleEdit = () => {
     })
   }
 }
+const saveData = async () => {
+  toggleEdit()
+  const formData = new FormData()
+  formData.append('_id', _id.value)
+  formData.append('signature', signature.value)
+  await userUpdateService(formData)
+  // 重新渲染
+  await userStore.getUser()
+  ElMessage.success('修改签名成功')
+}
+
 // 发布博客
 // 按钮颜色
 const color = ref('#24BA88')
@@ -85,8 +97,8 @@ const articles = ref([])
 
 // 获取博客列表
 const loading = ref(false)
-const formData = {
-  author: _id
+const BlogFormData = {
+  author: _id.value
   // tag: 'your-tag',
   // year: 2023,
   // order: '1',
@@ -94,7 +106,7 @@ const formData = {
 }
 const getArticles = async () => {
   loading.value = true
-  const res = await blogGetListService(formData)
+  const res = await blogGetListService(BlogFormData)
   articles.value = res.data.articles.reverse()
   console.log(articles.value)
   loading.value = false
@@ -139,13 +151,13 @@ const reGet = () => {
       v-if="isEditing"
       ref="signatureRef"
       v-model="signature"
-      @blur="toggleEdit"
+      @blur="saveData"
       size="small"
       maxlength="20"
       placeholder="请输入个性签名"
       autofocus
     />
-    <p @dblclick="toggleEdit" v-else>{{ isEditing ? signature : '请填写你的个性签名' }}</p>
+    <p @dblclick="toggleEdit" v-else>{{ signature }}</p>
   </div>
 
   <!-- 筛选区域 -->
@@ -240,6 +252,7 @@ const reGet = () => {
   width: 120px;
   height: 120px;
   border-radius: 12px;
+  pointer-events: none;
 }
 .user span {
   font-size: 26px;
@@ -250,6 +263,9 @@ const reGet = () => {
   font-weight: 100;
   color: rgb(104, 104, 103);
   cursor: pointer;
+}
+.user .el-input {
+  width: 300px;
 }
 
 /* 设置顶部背景 */

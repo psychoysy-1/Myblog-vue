@@ -85,13 +85,14 @@ const login = async () => {
     username: loginForm.value.username,
     password: loginForm.value.password
   })
-  const { token, username, nickname, _id, email, country, avatar, blogBackground } = res.data
+  const { token, username, nickname, _id, email, country, avatar, blogBackground, signature } =
+    res.data
   // 登录提示
   ElMessage.success(`欢迎! ${nickname}`)
   // 储存token
   userStore.setToken(token)
   // 存储用户信息
-  userStore.setUser({ username, nickname, _id, email, country, avatar, blogBackground })
+  userStore.setUser({ username, nickname, _id, email, country, avatar, blogBackground, signature })
   // 跳转到首页
   router.push('/')
 }

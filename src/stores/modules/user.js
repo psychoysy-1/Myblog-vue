@@ -22,6 +22,7 @@ export const useUserStore = defineStore(
       user.value.nickname = res.data.data.nickname
       user.value.email = res.data.data.email
       user.value.country = res.data.data.country
+      user.value.signature = res.data.data.signature
     }
     const setUser = (newUser) => {
       user.value = newUser

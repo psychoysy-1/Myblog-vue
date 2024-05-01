@@ -24,7 +24,7 @@ const formatDate = (dateString) => {
 <template>
   <div class="blog-content">
     <div class="left">
-      <img v-if="article.imageUrl" :src="`http://localhost:3000/${article.imageUrl[0]}`" alt="" />
+      <img v-if="article.imageUrl" :src="`http://localhost:3000${article.imageUrl[0]}`" alt="" />
       <img v-else src="@/assets/default.png" alt="" />
     </div>
     <div class="right">

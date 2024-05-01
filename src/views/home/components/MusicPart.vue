@@ -97,6 +97,18 @@ const togglePlay = () => {
   background-color: #6449dd;
 }
 
+/* 配置无法选中,完善用户体验 */
+.music,
+.describe {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.music img {
+  pointer-events: none;
+}
+
 .music {
   display: flex;
   flex-direction: column;

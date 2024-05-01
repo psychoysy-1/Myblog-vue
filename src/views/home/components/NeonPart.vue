@@ -82,5 +82,9 @@ h3 {
   color: rgb(4, 15, 36);
   -webkit-box-reflect: below 1px linear-gradient(transparent, rgb(218, 218, 218));
   animation: san 8s linear infinite;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 </style>
