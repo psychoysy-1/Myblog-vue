@@ -1,12 +1,12 @@
 <script setup>
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, computed } from 'vue'
 import { useUserStore } from '@/stores'
 import { uploadBgService, userUpdateService } from '@/api/user'
 import PublishBlog from './components/PublishEdit.vue'
 import { Edit, Search, Expand, Fold } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import BlogContent from './components/BlogContent.vue'
-import { blogGetListService } from '@/api/blog'
+import { blogGetListService, blogGetFilterService } from '@/api/blog'
 
 // 获取用户id
 const userStore = useUserStore()
@@ -62,8 +62,16 @@ const toggleEdit = async () => {
     })
   }
 }
+// 更新签名
 const saveData = async () => {
   toggleEdit()
+  if (signature.value.trim() === '') {
+    ElMessage.error('签名不能为空')
+    return
+  } else if (signature.value.trim() === userStore.user.signature) {
+    ElMessage.warning('请修改你的签名')
+    return
+  }
   const formData = new FormData()
   formData.append('_id', _id.value)
   formData.append('signature', signature.value)
@@ -73,8 +81,7 @@ const saveData = async () => {
   ElMessage.success('修改签名成功')
 }
 
-// 发布博客
-// 按钮颜色
+// 发布博客 的按钮颜色
 const color = ref('#24BA88')
 color.value = localStorage.getItem('color')
 const BtnColorChange = () => {
@@ -92,23 +99,50 @@ const toggleSort = () => {
   articles.value = articles.value.reverse()
 }
 
+// 计算属性
+const selectedYear = computed({
+  get() {
+    return BlogFormData.value.year
+  },
+  set(value) {
+    BlogFormData.value.year = value ? value.slice(0, 4) : ''
+  }
+})
+
+// 清除筛选
+const clear = () => {
+  BlogFormData.value.tag = ''
+  BlogFormData.value.year = ''
+  BlogFormData.value.search = ''
+  reGet()
+}
+
 // 博客渲染
 const articles = ref([])
 
-// 获取博客列表
+// 获取标签和年份
+const tagsAndYears = ref({
+  tags: [],
+  years: []
+})
+
+// 获取博客列表 加载动画
 const loading = ref(false)
-const BlogFormData = {
-  author: _id.value
-  // tag: 'your-tag',
-  // year: 2023,
-  // order: '1',
-  // search: 'your-search-keyword'
-}
+const BlogFormData = ref({
+  author: _id.value,
+  tag: '',
+  year: '',
+  search: ''
+})
+
+// 获取
 const getArticles = async () => {
   loading.value = true
-  const res = await blogGetListService(BlogFormData)
-  articles.value = res.data.articles.reverse()
-  console.log(articles.value)
+  const res1 = await blogGetListService(BlogFormData.value) //获取博客
+  articles.value = res1.data.articles.reverse()
+  const res2 = await blogGetFilterService(_id.value) //获取标签和年份
+  tagsAndYears.value.tags = res2.data.data.tags
+  tagsAndYears.value.years = res2.data.data.years
   loading.value = false
 }
 getArticles()
@@ -163,18 +197,44 @@ const reGet = () => {
   <!-- 筛选区域 -->
   <div class="filter">
     <div class="filterIntro">
-      <span>{{ nickname }}的帖子</span>
+      <span>{{ nickname }}的{{ isSort ? '最新' : '最旧' }}帖子</span>
     </div>
     <div class="filterArea">
-      <el-select placeholder="帖子类型" class="type" size="large"></el-select>
-      <el-select placeholder="日期" size="large"></el-select>
+      <el-select
+        placeholder="帖子类型"
+        class="type"
+        size="large"
+        v-model="BlogFormData.tag"
+        @change="reGet"
+      >
+        <el-option
+          v-for="(item, index) in tagsAndYears.tags"
+          :key="index"
+          :value="item"
+        ></el-option>
+      </el-select>
+      <el-select placeholder="日期" size="large" v-model="selectedYear" @change="reGet">
+        <el-option
+          v-for="(item, index) in tagsAndYears.years"
+          :key="index"
+          :value="item"
+        ></el-option>
+      </el-select>
       <el-button size="large" @click="toggleSort">
         <div class="icon-wrapper">
           <el-icon v-if="isSort" size="large"><Expand /></el-icon>
           <el-icon v-else size="large"><Fold /></el-icon>
         </div>
       </el-button>
-      <el-input placeholder="搜索帖子" :prefix-icon="Search" size="large"> </el-input>
+      <el-input
+        placeholder="搜索帖子标题"
+        :prefix-icon="Search"
+        size="large"
+        v-model="BlogFormData.search"
+        @keyup.enter="reGet"
+        @blur="reGet"
+      ></el-input>
+      <el-button size="large" @click="clear">清除筛选</el-button>
     </div>
   </div>
 
