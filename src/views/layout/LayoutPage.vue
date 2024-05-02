@@ -63,9 +63,9 @@ setInterval(() => {
             <span>我的博客</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="/blogDetail" :class="{ show: isAsideShow }" class="delay2">
+        <el-menu-item index="1" :class="{ show: isAsideShow }" class="delay2">
           <el-icon><List /></el-icon>
-          <template #title>博客细节</template>
+          <template #title>社交大厅</template>
         </el-menu-item>
         <el-menu-item index="/photoWall" :class="{ show: isAsideShow }" class="delay3">
           <el-icon><PictureFilled /></el-icon>

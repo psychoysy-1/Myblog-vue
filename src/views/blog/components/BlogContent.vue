@@ -1,8 +1,11 @@
 <script setup>
 import { View, ChatRound, Files, Clock } from '@element-plus/icons-vue'
+import { useBlogStore } from '@/stores'
+
+const blogStore = useBlogStore()
 
 // 获取文章数据
-defineProps({
+const content = defineProps({
   article: {
     type: Object,
     required: true
@@ -19,6 +22,11 @@ const formatDate = (dateString) => {
   const day = date.getDate()
   return `${year}年${month}月${day}日`
 }
+
+// 将文章详细传递
+const giveDetail = () => {
+  blogStore.setBlogContent(content.article)
+}
 </script>
 
 <template>
@@ -34,8 +42,10 @@ const formatDate = (dateString) => {
           <span>{{ formatDate(article.createdAt) }}</span>
         </div>
       </div>
-      <div class="title">
-        <el-text truncated>{{ article.title }}</el-text>
+      <div class="title" @click="giveDetail">
+        <el-link :underline="false" href="http://localhost:5173/blogDetail">
+          <el-text truncated>{{ article.title }}</el-text>
+        </el-link>
       </div>
       <div class="introduce">
         <div class="author box">
