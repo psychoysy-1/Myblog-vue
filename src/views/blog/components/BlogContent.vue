@@ -1,6 +1,7 @@
 <script setup>
 import { View, ChatRound, Files, Clock } from '@element-plus/icons-vue'
 import { useBlogStore } from '@/stores'
+import { blogAddViewService } from '@/api/blog'
 
 const blogStore = useBlogStore()
 
@@ -25,6 +26,7 @@ const formatDate = (dateString) => {
 
 // 将文章详细传递
 const giveDetail = () => {
+  blogAddViewService(content.article._id)
   blogStore.setBlogContent(content.article)
 }
 </script>

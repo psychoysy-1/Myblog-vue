@@ -8,3 +8,6 @@ export const blogGetListService = (data) => request.post('/articles/uid', data)
 
 // 获取筛选条件
 export const blogGetFilterService = (query) => request.get(`/articles/tagsAndYears/${query}`)
+
+// 增加浏览量
+export const blogAddViewService = (id) => request.patch(`/articles/views/${id}`)

@@ -12,7 +12,6 @@ const color = localStorage.getItem('color')
 
 // 获取文章详情
 const blogDetail = ref(blogStore.blogContent)
-console.log(blogDetail.value)
 
 // 计算发布时间
 const publishedAt = computed(() => {
@@ -137,10 +136,18 @@ const goBack = () => {
 .el-carousel {
   margin: 40px 0;
 }
+.el-carousel__item {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
 .el-carousel__item img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  pointer-events: none;
 }
 
 /* 按钮区域 */
