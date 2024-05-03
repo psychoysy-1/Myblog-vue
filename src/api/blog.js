@@ -11,3 +11,6 @@ export const blogGetFilterService = (query) => request.get(`/articles/tagsAndYea
 
 // 增加浏览量
 export const blogAddViewService = (id) => request.patch(`/articles/views/${id}`)
+
+// 删除博客
+export const blogDeleteService = (id) => request.delete(`/articles/${id}`)

@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useUserStore, useBlogStore } from '@/stores'
 import { useRouter } from 'vue-router'
+import { blogDeleteService } from '@/api/blog'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -40,6 +41,18 @@ const publishedAt = computed(() => {
   }
 })
 
+// 删除文章
+const blogDelete = () => {
+  ElMessageBox.confirm('你确认要删除这个博客吗?', '警告', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    blogDeleteService(blogDetail.value._id)
+    ElMessage.success('删除成功')
+  })
+}
+
 // 返回首页
 const goBack = () => {
   router.back()
@@ -55,7 +68,7 @@ const goBack = () => {
   <!-- 按钮区域 -->
   <div class="button">
     <el-button :style="{ background: color }" size="large" @click="goBack">返回博客列表</el-button>
-    <el-button :style="{ background: color }" size="large">删除文章</el-button>
+    <el-button :style="{ background: color }" size="large" @click="blogDelete">删除文章</el-button>
   </div>
 
   <!-- 用户头像及签名 -->
@@ -92,12 +105,36 @@ const goBack = () => {
         <div class="commentHead">
           <span>Comments({{ blogDetail.commentCount }})</span>
         </div>
+        <div class="publishComment">
+          <el-input
+            v-model="textarea"
+            style="width: 820px"
+            :rows="8"
+            type="textarea"
+            placeholder="发表你的评论吧..."
+          />
+          <el-button type="info">发布评论</el-button>
+        </div>
+
+        <div class="commentList"></div>
       </div>
     </el-main>
   </div>
 </template>
 
 <style>
+/* 发表评论 */
+.publishComment {
+  width: 100%;
+  margin-top: 20px;
+  background-color: white;
+  height: 220px;
+  padding: 20px;
+}
+.publishComment .el-button {
+  margin-top: 10px;
+}
+
 /* 设置详情样式 */
 .blogDetail {
   border-top: 1px solid #c0c0c0;
@@ -117,6 +154,7 @@ const goBack = () => {
 /* 评论区域 */
 .comment {
   margin: 20px 0;
+  overflow: hidden;
 }
 .comment .commentHead {
   margin-top: 15px;

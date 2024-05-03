@@ -149,7 +149,6 @@ const giveDetail = () => {
   margin-left: 2px;
 }
 .introduce .author :hover,
-.introduce .comment :hover,
 .introduce .tagName :hover {
   cursor: pointer;
   color: v-bind(color);

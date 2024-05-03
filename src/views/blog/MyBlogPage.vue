@@ -306,6 +306,13 @@ const reGet = () => {
   margin: 0 auto;
   transform: translateY(-70%);
 }
+.user-avatar {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
 .user-avatar img {
   width: 120px;
   height: 120px;
