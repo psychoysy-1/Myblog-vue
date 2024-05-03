@@ -3,6 +3,8 @@ import { ref, computed } from 'vue'
 import { useUserStore, useBlogStore } from '@/stores'
 import { useRouter } from 'vue-router'
 import { blogDeleteService } from '@/api/blog'
+import { commentCreateService, commentListService } from '@/api/comment'
+import CommentContent from './components/CommentContent.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -50,7 +52,42 @@ const blogDelete = () => {
   }).then(() => {
     blogDeleteService(blogDetail.value._id)
     ElMessage.success('删除成功')
+    router.back()
   })
+}
+
+// 发表评论
+const textarea = ref('')
+const commentCreate = async () => {
+  if (textarea.value.trim() === '') {
+    ElMessage.error('评论内容不能为空')
+    return
+  }
+  const data = {
+    article_id: blogDetail.value._id,
+    content: textarea.value,
+    uid: userStore.user._id
+  }
+  await commentCreateService(data)
+  ElMessage.success('评论成功')
+  textarea.value = ''
+  getCommentList()
+  blogDetail.value.commentCount++
+}
+
+// 获取评论列表
+const commentList = ref([])
+const getCommentList = async () => {
+  const res = await commentListService(blogDetail.value._id)
+  commentList.value = res.data.data
+  commentList.value.reverse()
+}
+getCommentList()
+
+// 删除评论后重新获取评论列表
+const reGet = () => {
+  blogDetail.value.commentCount--
+  getCommentList()
 }
 
 // 返回首页
@@ -93,7 +130,7 @@ const goBack = () => {
       <!-- 轮播图 -->
       <el-carousel :interval="4000" height="600px" pause-on-hover>
         <el-carousel-item v-for="(item, index) in blogDetail.imageUrl" :key="index">
-          <img :src="`http://localhost:3000/${item}`" alt="" />
+          <img :src="`http://localhost:3000${item}`" alt="" />
         </el-carousel-item>
       </el-carousel>
       <!-- 文本内容 -->
@@ -113,10 +150,18 @@ const goBack = () => {
             type="textarea"
             placeholder="发表你的评论吧..."
           />
-          <el-button type="info">发布评论</el-button>
+          <el-button type="info" @click="commentCreate">发布评论</el-button>
         </div>
 
-        <div class="commentList"></div>
+        <!-- 评论列表 -->
+        <div class="commentList">
+          <comment-content
+            v-for="item in commentList"
+            :key="item._id"
+            :comment="item"
+            @deleteComment="reGet"
+          ></comment-content>
+        </div>
       </div>
     </el-main>
   </div>
@@ -125,11 +170,12 @@ const goBack = () => {
 <style>
 /* 发表评论 */
 .publishComment {
-  width: 100%;
-  margin-top: 20px;
+  width: 95%;
+  margin: 20px 0;
   background-color: white;
   height: 220px;
   padding: 20px;
+  border-radius: 10px;
 }
 .publishComment .el-button {
   margin-top: 10px;

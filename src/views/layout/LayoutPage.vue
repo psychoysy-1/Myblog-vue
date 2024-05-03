@@ -48,7 +48,6 @@ const changeTheme = (theme) => {
   themeStore.setTheme(theme)
 }
 const theme = ref(themeStore.theme)
-console.log(theme.value)
 </script>
 
 <template>
