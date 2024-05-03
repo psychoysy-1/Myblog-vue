@@ -9,11 +9,12 @@ import {
   Iphone
 } from '@element-plus/icons-vue'
 import { ref } from 'vue'
-import { useUserStore } from '@/stores'
+import { useUserStore, useThemeStore } from '@/stores'
 import { useRouter } from 'vue-router'
 import WechatDialog from './components/WechatDialog.vue'
 
 const userStore = useUserStore()
+const themeStore = useThemeStore()
 const router = useRouter()
 const dialog = ref()
 const isCollapse = ref(false)
@@ -41,13 +42,20 @@ const isAsideShow = ref(false)
 setInterval(() => {
   isAsideShow.value = true
 }, 20)
+
+// 改变主题颜色
+const changeTheme = (theme) => {
+  themeStore.setTheme(theme)
+}
+const theme = ref(themeStore.theme)
+console.log(theme.value)
 </script>
 
 <template>
   <el-container class="layout-container">
     <!-- 导航条设置 -->
     <el-aside width="248px">
-      <el-menu class="el-menu-vertical-demo" :collapse="isCollapse" router>
+      <el-menu class="el-menu" :collapse="isCollapse" router :class="theme">
         <!-- 图标和首页 -->
         <div class="el-aside-home">
           <el-link href="/home" :underline="false">
@@ -111,8 +119,8 @@ setInterval(() => {
           <div class="theme-module">
             <span>主题设置:</span>
             <div class="change-theme">
-              <el-button>浅色</el-button>
-              <el-button type="info">深色</el-button>
+              <el-button @click="changeTheme('light')">浅色</el-button>
+              <el-button type="info" @click="changeTheme('dark')">深色</el-button>
             </div>
           </div>
           <div class="divider"></div>
@@ -142,6 +150,11 @@ setInterval(() => {
 </style>
 
 <style scoped lang="scss">
+// 主题设置
+.dark {
+  background-color: #282523;
+}
+
 // 获取应用
 .getMobile {
   position: absolute;
@@ -344,7 +357,7 @@ setInterval(() => {
   padding: 0;
 }
 
-.el-menu-vertical-demo:not(.el-menu--collapse) {
+.el-menu:not(.el-menu--collapse) {
   width: 100%;
   height: 100vh;
 }

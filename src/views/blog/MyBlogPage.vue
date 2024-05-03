@@ -337,6 +337,7 @@ const reGet = () => {
   height: 100%;
   object-fit: cover;
   border: none;
+  pointer-events: none;
 }
 .upload {
   width: 100%;
