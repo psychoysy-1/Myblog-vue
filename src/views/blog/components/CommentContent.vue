@@ -38,10 +38,15 @@ const emit = defineEmits(['deleteComment'])
   <div class="comment-content">
     <div class="introduce">
       <div class="avatar">
-        <img :src="`http://localhost:3000/${comment.comment.author.avatar}`" />
+        <img
+          v-if="comment.comment.author"
+          :src="`http://localhost:3000/${comment.comment.author.avatar}`"
+        />
+        <img v-else src="@/assets/default.png" alt="" />
       </div>
       <div class="name-time">
-        <div class="name">{{ comment.comment.author.nickname }}</div>
+        <div class="name" v-if="comment.comment.author">{{ comment.comment.author.nickname }}</div>
+        <div class="time" v-else>匿名用户</div>
         <div class="time">{{ formatDate(comment.comment.createdAt) }}</div>
       </div>
     </div>

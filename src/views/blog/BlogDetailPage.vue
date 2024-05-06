@@ -286,7 +286,7 @@ const goBack = () => {
   justify-content: center;
   width: 400px;
   margin: 0 auto;
-  transform: translateY(-63%);
+  transform: translateY(-70%);
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;

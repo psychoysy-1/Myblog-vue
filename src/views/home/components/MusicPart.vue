@@ -1,46 +1,63 @@
 <script setup>
 import { ArrowRightBold, ArrowLeftBold, VideoPause, VideoPlay } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+// 图片引入
+import img1 from '@/assets/musicImg/1.jpg'
+import img2 from '@/assets/musicImg/2.jpg'
+import img3 from '@/assets/musicImg/3.jpg'
+import img4 from '@/assets/musicImg/4.jpg'
+import img5 from '@/assets/musicImg/5.jpg'
+// 音乐引入
+import music1 from '@/assets/music/1.ogg'
+import music2 from '@/assets/music/2.ogg'
+import music3 from '@/assets/music/3.mp3'
+import music4 from '@/assets/music/4.mp3'
+import music5 from '@/assets/music/5.mp3'
 
 // 播放器音乐
-// const musicList = ref([
-//   {
-//     img: '@/assets/musicImg/1.jpg',
-//     title: 'love yourslf',
-//     author: 'Justin Bieber',
-//     src: '@/assets/music/1.ogg'
-//   },
-//   {
-//     img: '@/assets/musicImg/2.jpg',
-//     title: 'Peaches',
-//     author: 'Justin Bieber',
-//     src: '@/assets/music/2.ogg'
-//   },
-//   {
-//     img: '@/assets/musicImg/3.jpg',
-//     title: '人鱼的眼泪',
-//     author: 'EXO',
-//     src: '@/assets/music/3.mp3'
-//   },
-//   {
-//     img: '@/assets/musicImg/4.jpg',
-//     title: 'STAY',
-//     author: 'Justin Bieber',
-//     src: '@/assets/music/4.mp3'
-//   },
-//   {
-//     img: '@/assets/musicImg/5.jpg',
-//     title: '我落泪情绪零碎',
-//     author: '周杰伦',
-//     src: '@/assets/music/5.mp3'
-//   }
-// ])
+const musicList = ref([
+  {
+    img: img1,
+    title: 'love yourslf',
+    author: 'Justin Bieber',
+    src: music1
+  },
+  {
+    img: img2,
+    title: 'Peaches',
+    author: 'Justin Bieber',
+    src: music2
+  },
+  {
+    img: img3,
+    title: '人鱼的眼泪',
+    author: 'EXO',
+    src: music3
+  },
+  {
+    img: img4,
+    title: 'STAY',
+    author: 'Justin Bieber',
+    src: music4
+  },
+  {
+    img: img5,
+    title: '我落泪情绪零碎',
+    author: '周杰伦',
+    src: music5
+  }
+])
 
-// 播放音乐
+const currentIndex = ref(0)
 const isPlaying = ref(false)
+let audioEl = null
+
+watch(currentIndex, () => {
+  updateAudioSrc()
+})
+
 const togglePlay = () => {
   isPlaying.value = !isPlaying.value
-  const audioEl = document.querySelector('audio')
   const imgEl = document.querySelector('.music img')
   if (isPlaying.value) {
     audioEl.play()
@@ -50,21 +67,31 @@ const togglePlay = () => {
     imgEl.classList.remove('rotating')
   }
 }
+
+const changeCurrentSong = (index) => {
+  currentIndex.value = (index + musicList.value.length) % musicList.value.length
+}
+
+const updateAudioSrc = () => {
+  audioEl = document.querySelector('audio')
+  audioEl.src = musicList.value[currentIndex.value].src
+  togglePlay()
+}
 </script>
 
 <template>
   <div class="music-component">
     <div class="music">
-      <img src="@/assets/musicImg/1.jpg" alt="" />
+      <img :src="musicList[currentIndex].img" alt="" />
       <audio controls style="display: none" loop>
-        <source src="@/assets/music/1.ogg" type="audio/mpeg" />
+        <source :src="musicList[currentIndex].src" type="audio/mpeg" />
       </audio>
       <div class="describe">
-        <span>love yourslf</span>
-        <span>Justin Bieber</span>
+        <span>{{ musicList[currentIndex].title }}</span>
+        <span>{{ musicList[currentIndex].author }}</span>
       </div>
       <div class="button">
-        <el-button circle size="large">
+        <el-button circle size="large" @click="changeCurrentSong(currentIndex - 1)">
           <el-icon>
             <ArrowLeftBold />
           </el-icon>
@@ -79,7 +106,7 @@ const togglePlay = () => {
             <VideoPlay />
           </el-icon>
         </el-button>
-        <el-button circle size="large">
+        <el-button circle size="large" @click="changeCurrentSong(currentIndex + 1)">
           <el-icon>
             <ArrowRightBold />
           </el-icon>

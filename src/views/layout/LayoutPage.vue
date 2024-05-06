@@ -105,10 +105,10 @@ const theme = ref(themeStore.theme)
           </div>
         </div>
 
-        <!-- 获取应用弹窗 -->
+        <!-- 赞助作者弹窗 -->
         <div class="getMobile" @click="showWechatDialog">
           <el-icon color="black"><Iphone /></el-icon>
-          <div class="get-mobile-text">获取应用</div>
+          <div class="get-mobile-text">赞助作者</div>
         </div>
         <!-- 弹窗 -->
         <wechat-dialog ref="dialog"></wechat-dialog>
@@ -135,7 +135,7 @@ const theme = ref(themeStore.theme)
         </div>
       </el-menu>
     </el-aside>
-    <el-main>
+    <el-main :class="theme">
       <router-view></router-view>
     </el-main>
   </el-container>
@@ -152,6 +152,9 @@ const theme = ref(themeStore.theme)
 // 主题设置
 .dark {
   background-color: #282523;
+}
+.el-main.dark {
+  background-color: #131312;
 }
 
 // 获取应用
