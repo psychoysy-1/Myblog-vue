@@ -1,6 +1,6 @@
 <script setup>
 import { ArrowRightBold, ArrowLeftBold, VideoPause, VideoPlay } from '@element-plus/icons-vue'
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 // 图片引入
 import img1 from '@/assets/musicImg/1.jpg'
 import img2 from '@/assets/musicImg/2.jpg'
@@ -69,14 +69,20 @@ const togglePlay = () => {
 }
 
 const changeCurrentSong = (index) => {
+  isPlaying.value = false
+  const imgEl = document.querySelector('.music img')
+  imgEl.classList.remove('rotating')
   currentIndex.value = (index + musicList.value.length) % musicList.value.length
 }
 
 const updateAudioSrc = () => {
   audioEl = document.querySelector('audio')
   audioEl.src = musicList.value[currentIndex.value].src
-  togglePlay()
 }
+
+onMounted(() => {
+  audioEl = document.querySelector('audio')
+})
 </script>
 
 <template>

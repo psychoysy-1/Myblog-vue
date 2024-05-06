@@ -2,6 +2,7 @@
 import MusicComponent from './components/MusicPart.vue'
 import ClockComponent from './components/EarthPart.vue'
 import NeonComponent from './components/NeonPart.vue'
+import StatisticsPart from './components/StatisticsPart.vue'
 </script>
 
 <template>
@@ -13,7 +14,7 @@ import NeonComponent from './components/NeonPart.vue'
     </div>
     <div class="bottom">
       <ClockComponent class="component2" />
-      <div class="music component3">3</div>
+      <StatisticsPart class="component3" />
     </div>
   </div>
 </template>
