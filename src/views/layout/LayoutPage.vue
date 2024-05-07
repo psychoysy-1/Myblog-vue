@@ -43,11 +43,12 @@ setInterval(() => {
   isAsideShow.value = true
 }, 20)
 
-// 改变主题颜色
-const changeTheme = (theme) => {
-  themeStore.setTheme(theme)
-}
 const theme = ref(themeStore.theme)
+
+const changeTheme = (newTheme) => {
+  theme.value = newTheme
+  themeStore.setTheme(newTheme)
+}
 </script>
 
 <template>

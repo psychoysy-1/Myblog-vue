@@ -3,6 +3,7 @@ import MusicComponent from './components/MusicPart.vue'
 import ClockComponent from './components/EarthPart.vue'
 import NeonComponent from './components/NeonPart.vue'
 import StatisticsPart from './components/StatisticsPart.vue'
+import WeatherPart from './components/WeatherPart.vue'
 </script>
 
 <template>
@@ -10,7 +11,7 @@ import StatisticsPart from './components/StatisticsPart.vue'
     <div class="top">
       <MusicComponent class="component1" />
       <NeonComponent class="component4" />
-      <div class="component1">图像</div>
+      <WeatherPart class="component1" />
     </div>
     <div class="bottom">
       <ClockComponent class="component2" />
