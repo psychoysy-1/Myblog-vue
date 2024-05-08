@@ -86,6 +86,12 @@ function handleResize() {
 </template>
 
 <style scoped>
+/* 全局设置 */
+.statistics {
+  display: flex;
+  background-color: #97f1cf;
+}
+
 .tags {
   display: flex;
   flex-direction: column;

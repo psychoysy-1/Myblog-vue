@@ -20,7 +20,6 @@ const weather = ref({})
 onMounted(async () => {
   const response = await fetch(requestUrl)
   const data = await response.json()
-  console.log(data.lives[0])
   weather.value = data.lives[0]
 })
 </script>
@@ -68,6 +67,9 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 /* 顶部 */
