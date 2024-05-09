@@ -1,20 +1,30 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts/core'
-import { TooltipComponent, LegendComponent } from 'echarts/components'
-import { PieChart } from 'echarts/charts'
+import { TooltipComponent, LegendComponent, GridComponent } from 'echarts/components'
+import { PieChart, BarChart } from 'echarts/charts'
 import { LabelLayout } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 
-echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer, LabelLayout])
+echarts.use([
+  TooltipComponent,
+  LegendComponent,
+  PieChart,
+  BarChart,
+  CanvasRenderer,
+  LabelLayout,
+  GridComponent
+])
 
 const chartContainer = ref(null)
-let myChart = null
+const monthContainer = ref(null)
+let pieChart = null
+let barChart = null
 
 onMounted(() => {
-  // 初始化图表
-  myChart = echarts.init(chartContainer.value)
-  var option = {
+  // 初始化饼图
+  pieChart = echarts.init(chartContainer.value)
+  var pieOption = {
     tooltip: {
       trigger: 'axis'
     },
@@ -54,7 +64,48 @@ onMounted(() => {
     ]
   }
 
-  option && myChart.setOption(option)
+  pieOption && pieChart.setOption(pieOption)
+
+  // 初始化柱状图
+  barChart = echarts.init(monthContainer.value)
+  var barOption = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        axisTick: {
+          alignWithLabel: true
+        }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
+    series: [
+      {
+        name: '文章数量',
+        type: 'bar',
+        barWidth: '60%',
+        data: [10, 52, 200, 334, 390, 330, 220, 150, 82, 50, 20, 5]
+      }
+    ]
+  }
+
+  barOption && barChart.setOption(barOption)
 
   // 监听窗口大小变化
   window.addEventListener('resize', handleResize)
@@ -62,8 +113,11 @@ onMounted(() => {
 
 onUnmounted(() => {
   // 销毁图表实例
-  if (myChart) {
-    myChart.dispose()
+  if (pieChart) {
+    pieChart.dispose()
+  }
+  if (barChart) {
+    barChart.dispose()
   }
   // 移除事件监听器
   window.removeEventListener('resize', handleResize)
@@ -71,7 +125,8 @@ onUnmounted(() => {
 
 function handleResize() {
   // 重新初始化图表
-  myChart.resize()
+  pieChart.resize()
+  barChart.resize()
 }
 </script>
 
@@ -81,7 +136,10 @@ function handleResize() {
       <div class="tagStatistics" ref="chartContainer"></div>
       <span>标签统计</span>
     </div>
-    <div>aaa</div>
+    <div class="month">
+      <div class="monthStatistics" ref="monthContainer"></div>
+      <span>各月文章数量统计</span>
+    </div>
   </div>
 </template>
 
@@ -103,6 +161,20 @@ function handleResize() {
 }
 .tagStatistics {
   width: 350px;
+  height: 350px;
+}
+
+.month {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 900px;
+  height: 350px;
+  font-size: 20px;
+}
+.monthStatistics {
+  width: 100%;
   height: 350px;
 }
 </style>
