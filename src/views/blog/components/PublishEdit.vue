@@ -23,10 +23,10 @@ const inputValue = ref('') //标签输入框
 const InputRef = ref(null) //标签输入框ref
 // 展示输入框
 const showInput = () => {
-  if (dynamicTags.value.length >= 1) {
+  if (dynamicTags.value.length >= 3) {
     // 弹出提示框,禁止添加更多标签
     ElMessage({
-      message: '标签最多只能添加 1 个',
+      message: '标签最多只能添加 3 个',
       type: 'warning'
     })
     return
