@@ -3,7 +3,7 @@ import {
   Tools,
   Management,
   BellFilled,
-  List,
+  Comment,
   MoreFilled,
   PictureFilled,
   Iphone
@@ -71,8 +71,8 @@ const changeTheme = (newTheme) => {
             <span>我的博客</span>
           </template>
         </el-menu-item>
-        <el-menu-item index="1" :class="{ show: isAsideShow }" class="delay2">
-          <el-icon><List /></el-icon>
+        <el-menu-item index="/socialHall" :class="{ show: isAsideShow }" class="delay2">
+          <el-icon><Comment /></el-icon>
           <template #title>社交大厅</template>
         </el-menu-item>
         <el-menu-item index="/photoWall" :class="{ show: isAsideShow }" class="delay3">
@@ -142,7 +142,7 @@ const changeTheme = (newTheme) => {
   </el-container>
 </template>
 
-<!-- 全局样式 -->
+<!-- 全局 -->
 <style>
 * {
   margin: 0;

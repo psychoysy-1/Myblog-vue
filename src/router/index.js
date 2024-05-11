@@ -54,6 +54,15 @@ const router = createRouter({
           }
         },
         {
+          //社交大厅
+          path: '/socialHall',
+          name: 'socialHallPage',
+          component: () => import('@/views/socialHall/SocialHallPage.vue'),
+          meta: {
+            title: '社交大厅'
+          }
+        },
+        {
           // 设置
           path: '/setting',
           name: 'settingPage',

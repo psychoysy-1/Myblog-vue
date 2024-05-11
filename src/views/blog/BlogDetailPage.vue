@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 import { blogDeleteService } from '@/api/blog'
 import { commentCreateService, commentListService } from '@/api/comment'
 import CommentContent from './components/CommentContent.vue'
+import { Lock, Unlock } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -94,6 +95,19 @@ const reGet = () => {
 const goBack = () => {
   router.back()
 }
+
+// 设置是否仅自己可见
+const isPrivate = ref(false)
+const togglePrivate = () => {
+  ElMessageBox.confirm('你确认要设置/取消为私密吗?', '警告', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    isPrivate.value = !isPrivate.value
+    ElMessage.success('设置成功')
+  })
+}
 </script>
 
 <template>
@@ -104,8 +118,22 @@ const goBack = () => {
 
   <!-- 按钮区域 -->
   <div class="button">
-    <el-button :style="{ background: color }" size="large" @click="goBack">返回博客列表</el-button>
-    <el-button :style="{ background: color }" size="large" @click="blogDelete">删除文章</el-button>
+    <div class="back">
+      <el-button :style="{ background: color }" size="large" @click="goBack"
+        >返回博客列表</el-button
+      >
+    </div>
+    <div class="setting" v-if="userStore.user._id === blogDetail.author._id">
+      <el-button
+        size="large"
+        :style="{ background: color }"
+        :icon="isPrivate ? Lock : Unlock"
+        @click="togglePrivate"
+      ></el-button>
+      <el-button :style="{ background: color }" size="large" @click="blogDelete"
+        >删除文章</el-button
+      >
+    </div>
   </div>
 
   <!-- 用户头像及签名 -->

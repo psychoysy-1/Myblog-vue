@@ -14,3 +14,6 @@ export const blogAddViewService = (id) => request.patch(`/articles/views/${id}`)
 
 // 删除博客
 export const blogDeleteService = (id) => request.delete(`/articles/${id}`)
+
+// 获取所有博客
+export const blogGetAllService = () => request.get('/articles/allArticles')

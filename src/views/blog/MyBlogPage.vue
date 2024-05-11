@@ -5,7 +5,7 @@ import { uploadBgService, userUpdateService } from '@/api/user'
 import PublishBlog from './components/PublishEdit.vue'
 import { Edit, Search, Expand, Fold } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import BlogContent from './components/BlogContent.vue'
+import BlogContent from '@/components/BlogContent.vue'
 import { blogGetListService, blogGetFilterService } from '@/api/blog'
 
 // 获取用户id
