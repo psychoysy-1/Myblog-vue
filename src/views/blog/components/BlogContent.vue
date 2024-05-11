@@ -157,6 +157,7 @@ const giveDetail = () => {
 /* 内容区域 */
 .content {
   height: 100px;
+  pointer-events: none;
 }
 
 /* 左侧图片设置 */

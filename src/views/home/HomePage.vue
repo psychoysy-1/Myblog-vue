@@ -39,7 +39,7 @@ import WeatherPart from './components/WeatherPart.vue'
   width: 16vw;
   height: 49vh;
   min-width: 220px;
-  min-height: 350px;
+  min-height: 450px;
   border-radius: 8px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   transition: transform 0.6s ease;
@@ -54,8 +54,8 @@ import WeatherPart from './components/WeatherPart.vue'
 .component2 {
   width: 18.5vw;
   height: 18.5vw;
-  min-width: 260px;
-  min-height: 260px;
+  min-width: 350px;
+  min-height: 350px;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   transition: transform 0.6s ease;
@@ -64,6 +64,8 @@ import WeatherPart from './components/WeatherPart.vue'
 .component3 {
   width: 61.5vw;
   height: 18.5vw;
+  min-height: 350px;
+  min-width: 1180px;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   transition: transform 0.6s ease;
@@ -72,6 +74,8 @@ import WeatherPart from './components/WeatherPart.vue'
 .component4 {
   width: 47vw;
   height: 49vh;
+  min-height: 450px;
+  min-width: 900px;
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   transition: transform 0.6s ease;

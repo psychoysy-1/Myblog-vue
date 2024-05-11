@@ -142,10 +142,15 @@ const changeTheme = (newTheme) => {
   </el-container>
 </template>
 
+<!-- 全局样式 -->
 <style>
 * {
   margin: 0;
   padding: 0;
+}
+a {
+  text-decoration: none;
+  color: inherit;
 }
 </style>
 
