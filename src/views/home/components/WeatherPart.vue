@@ -1,12 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { LocationFilled, Odometer, WindPower } from '@element-plus/icons-vue'
 
 // 定义 API 请求地址和参数
 const apiUrl = 'https://restapi.amap.com/v3/weather/weatherInfo'
 const params = {
   key: '977bc4713b3aa33278388e7f6c746c03', // 替换成你的 API key
-  city: '210212', //
+  city: '210200', //
   extensions: 'base', // 返回实况天气和预报天气
   output: 'JSON' // 返回 JSON 格式
 }
@@ -17,15 +17,16 @@ const requestUrl = `${apiUrl}?${queryParams}`
 
 const weather = ref({})
 
-onMounted(async () => {
+const getWeather = async () => {
   const response = await fetch(requestUrl)
   const data = await response.json()
   weather.value = data.lives[0]
-})
+}
+getWeather()
 </script>
 
 <template>
-  <div class="weather" v-if="weather.city">
+  <div class="weather">
     <div class="address">
       <el-icon><LocationFilled /></el-icon>
       <span>{{ weather.province }}省 {{ weather.city }}</span>
