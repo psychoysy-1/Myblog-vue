@@ -1,6 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import { getPhotoWallService } from '@/api/photoWall'
+import { useUserStore } from '@/stores'
+
+// 获取用户id
+const userStore = useUserStore()
+const _id = ref(userStore.user._id)
 
 // 随机旋转角度
 const rotations = ref([])
@@ -16,7 +21,7 @@ const loading = ref(false)
 const photo = ref([])
 const getPhotoWall = async () => {
   loading.value = true
-  const res = await getPhotoWallService()
+  const res = await getPhotoWallService(_id.value)
   photo.value = res.data.data
   randomRotate()
   loading.value = false
@@ -25,19 +30,26 @@ getPhotoWall()
 </script>
 
 <template>
-  <div class="photowall" v-loading="loading">
+  <div class="photowall" v-loading="loading" v-if="photo.length">
     <div class="image-container" v-for="(item, index) in photo" :key="index">
       <img
-        :src="`http://localhost:3000${item.imageUrl}`"
+        :src="`http://localhost:3000${item}`"
         class="ima"
         :id="index + 1"
         :style="{ transform: `rotate(${rotations[index]}deg)` }"
       />
     </div>
   </div>
+  <div v-else class="no-photo">
+    <h2>暂无发布的博客照片</h2>
+  </div>
 </template>
 
 <style scoped>
+.no-photo {
+  text-align: center;
+  margin-top: 50px;
+}
 .photowall {
   background-color: #e7e7e7;
   display: flex;
@@ -52,6 +64,9 @@ getPhotoWall()
 
 .ima {
   width: 250px !important;
+  max-height: 350px !important;
+  object-fit: cover; /* 设置图片显示模式为裁剪,保持宽高比 */
+  object-position: center; /* 设置图片在容器中的对齐位置 */
   padding: 18px;
   background-color: #ffffff;
   transition: transform 0.8s;

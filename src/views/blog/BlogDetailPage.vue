@@ -128,6 +128,12 @@ const getAuthor = async () => {
   loading.value = false
 }
 getAuthor()
+
+// 是否订阅
+const isSubscribed = ref(false)
+const toggleSubscribe = () => {
+  isSubscribed.value = !isSubscribed.value
+}
 </script>
 
 <template>
@@ -156,6 +162,14 @@ getAuthor()
       ></el-button>
       <el-button :style="{ background: color }" size="large" @click="blogDelete"
         >删除文章</el-button
+      >
+    </div>
+    <div class="setting" v-else>
+      <el-button size="large" type="info" v-if="isSubscribed" @click="toggleSubscribe"
+        >取消关注</el-button
+      >
+      <el-button size="large" :style="{ background: color }" v-else @click="toggleSubscribe"
+        >关注作者</el-button
       >
     </div>
   </div>
