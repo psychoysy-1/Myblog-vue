@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { useUserStore, useBlogStore } from '@/stores'
 import { useRouter } from 'vue-router'
-import { blogDeleteService } from '@/api/blog'
+import { blogDeleteService, blogSetPrivateService, blogGetUserByArticleIdService } from '@/api/blog'
 import { commentCreateService, commentListService } from '@/api/comment'
 import CommentContent from './components/CommentContent.vue'
 import { Lock, Unlock } from '@element-plus/icons-vue'
@@ -97,23 +97,47 @@ const goBack = () => {
 }
 
 // 设置是否仅自己可见
-const isPrivate = ref(false)
+const isPrivate = ref(blogDetail.value.isPrivate)
 const togglePrivate = () => {
-  ElMessageBox.confirm('你确认要设置/取消为私密吗?', '警告', {
+  ElMessageBox.confirm('你确认要设置/取消私密吗?(私密文章仅自己可见)', '警告', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
     type: 'warning'
-  }).then(() => {
+  }).then(async () => {
     isPrivate.value = !isPrivate.value
+    await blogSetPrivateService(blogDetail.value._id, { isPrivate: isPrivate.value })
     ElMessage.success('设置成功')
+    blogStore.blogContent.isPrivate = isPrivate.value
   })
 }
+
+// 设置加载状态
+const loading = ref(false)
+
+// 渲染博客作者头像和签名
+const author = ref({
+  blogBackground: '',
+  avatar: '',
+  nickname: '',
+  signature: ''
+})
+const getAuthor = async () => {
+  loading.value = true
+  const res = await blogGetUserByArticleIdService(blogDetail.value._id)
+  author.value = res.data.userInfo
+  loading.value = false
+}
+getAuthor()
 </script>
 
 <template>
   <!-- 背景图片区域 -->
-  <div class="blog-background">
-    <img :src="`http://localhost:3000${userStore.user.blogBackground}`" class="full-image" />
+  <div class="blog-background" v-loading="loading.value">
+    <img
+      v-if="author.blogBackground"
+      :src="`http://localhost:3000/${author.blogBackground}`"
+      class="full-image"
+    />
   </div>
 
   <!-- 按钮区域 -->
@@ -139,10 +163,10 @@ const togglePrivate = () => {
   <!-- 用户头像及签名 -->
   <div class="user">
     <div class="user-avatar">
-      <img :src="`http://localhost:3000/${userStore.user.avatar}`" />
+      <img v-if="author.avatar" :src="`http://localhost:3000/${author.avatar}`" />
     </div>
-    <span>{{ userStore.user.nickname }}</span>
-    <p>{{ userStore.user.signature }}</p>
+    <span>{{ author.nickname }}</span>
+    <p>{{ author.signature || '这个人很懒，没有设置签名' }}</p>
   </div>
 
   <!-- 文章详情 -->

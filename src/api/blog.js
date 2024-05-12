@@ -17,3 +17,9 @@ export const blogDeleteService = (id) => request.delete(`/articles/${id}`)
 
 // 获取所有博客
 export const blogGetAllService = () => request.get('/articles/allArticles')
+
+// 设置是否私密
+export const blogSetPrivateService = (id, data) => request.put(`/articles/${id}/private`, data)
+
+//根据文章id获取发表该文章的用户信息
+export const blogGetUserByArticleIdService = (id) => request.get(`/articles/${id}/userInfo`)
