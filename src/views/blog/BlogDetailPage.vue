@@ -4,6 +4,7 @@ import { useUserStore, useBlogStore } from '@/stores'
 import { useRouter } from 'vue-router'
 import { blogDeleteService, blogSetPrivateService, blogGetUserByArticleIdService } from '@/api/blog'
 import { commentCreateService, commentListService } from '@/api/comment'
+import { followUserService, getFollowStatusService, cancelFollowService } from '@/api/user'
 import CommentContent from './components/CommentContent.vue'
 import { Lock, Unlock } from '@element-plus/icons-vue'
 
@@ -114,7 +115,7 @@ const togglePrivate = () => {
 // 设置加载状态
 const loading = ref(false)
 
-// 渲染博客作者头像和签名
+// 渲染博客作者头像和签名 以及是否关注
 const author = ref({
   blogBackground: '',
   avatar: '',
@@ -125,14 +126,37 @@ const getAuthor = async () => {
   loading.value = true
   const res = await blogGetUserByArticleIdService(blogDetail.value._id)
   author.value = res.data.userInfo
+  // 获取关注信息
+  const res2 = await getFollowStatusService(userStore.user._id, blogDetail.value.author._id)
+  isSubscribed.value = res2.data.data
   loading.value = false
 }
 getAuthor()
 
-// 是否订阅
-const isSubscribed = ref(false)
-const toggleSubscribe = () => {
+// 是否关注
+const isSubscribed = ref()
+// 关注作者
+const followAuthor = async () => {
+  console.log(blogDetail.value._id)
+  await followUserService({
+    followerId: userStore.user._id,
+    followeeId: blogDetail.value.author._id
+  })
+  ElMessage.success('关注成功')
   isSubscribed.value = !isSubscribed.value
+}
+// 取消关注
+const cancelFollow = () => {
+  ElMessageBox.confirm('你确定要取消关注吗?', '警告', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    cancelFollowService(userStore.user._id, blogDetail.value.author._id).then(() => {
+      ElMessage.success('取消关注成功')
+      isSubscribed.value = !isSubscribed.value
+    })
+  })
 }
 </script>
 
@@ -165,10 +189,10 @@ const toggleSubscribe = () => {
       >
     </div>
     <div class="setting" v-else>
-      <el-button size="large" type="info" v-if="isSubscribed" @click="toggleSubscribe"
+      <el-button size="large" type="info" v-if="isSubscribed" @click="cancelFollow"
         >取消关注</el-button
       >
-      <el-button size="large" :style="{ background: color }" v-else @click="toggleSubscribe"
+      <el-button size="large" :style="{ background: color }" v-else @click="followAuthor"
         >关注作者</el-button
       >
     </div>

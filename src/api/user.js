@@ -20,3 +20,26 @@ export const updatePasswordService = (data) => request.put('/userInfo/password',
 
 // 上传博客背景图
 export const uploadBgService = (data) => request.post('/userBlogBackground', data)
+
+// 关注用户
+export const followUserService = (data) => request.post('/userInfo/follow', data)
+
+// 获取是否关注
+export const getFollowStatusService = (followerId, followeeId) => {
+  return request.get('/userInfo/follow', {
+    params: {
+      followerId,
+      followeeId
+    }
+  })
+}
+
+// 取消关注
+export const cancelFollowService = (followerId, followeeId) => {
+  return request.delete('/userInfo/follow', {
+    data: {
+      followerId,
+      followeeId
+    }
+  })
+}
