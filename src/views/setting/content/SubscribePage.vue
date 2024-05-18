@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <p>您目前没有订阅任何人</p>
+  <p>您目前没有关注任何人</p>
 </template>
 
 <style scoped>

@@ -176,7 +176,8 @@ const reGet = () => {
   <!-- 用户头像及签名 -->
   <div class="user">
     <div class="user-avatar">
-      <img :src="`http://localhost:3000/${userStore.user.avatar}`" />
+      <img v-if="userStore.user.avatar" :src="`http://localhost:3000/${userStore.user.avatar}`" />
+      <img v-else src="@/assets/default.png" />
     </div>
     <span>{{ userStore.user.nickname }}</span>
     <el-input

@@ -97,7 +97,7 @@ const changeTheme = (newTheme) => {
               :src="`http://localhost:3000/${userStore.user.avatar}`"
             />
             <img v-else src="@/assets/default.png" class="avatar" />
-            <div class="name">{{ userStore.user.nickname || userStore.user.username }}</div>
+            <el-text truncated class="name">{{ userStore.user.nickname }}</el-text>
           </div>
           <div class="more-options">
             <div class="user-set" @click="changeOptionsBox">
@@ -310,6 +310,7 @@ a {
     .name {
       font-size: 16px;
       font-weight: bold;
+      width: 105px;
     }
   }
 

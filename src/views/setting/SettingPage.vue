@@ -16,7 +16,7 @@
       <el-menu-item index="/setting/baseInfo" class="menu-item"> 基本信息 </el-menu-item>
       <el-menu-item index="/setting/account" class="menu-item"> 账户设置 </el-menu-item>
       <el-menu-item index="/setting/email" class="menu-item"> 邮件通知 </el-menu-item>
-      <el-menu-item index="/setting/subscribe" class="menu-item"> 订阅 </el-menu-item>
+      <el-menu-item index="/setting/subscribe" class="menu-item"> 关注 </el-menu-item>
     </el-menu>
     <!-- 下面内容 -->
     <router-view></router-view>

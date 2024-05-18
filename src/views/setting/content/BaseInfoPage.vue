@@ -26,8 +26,8 @@ const userStore = useUserStore()
 const avatar = ref(userStore.user.avatar)
 const _id = ref(userStore.user._id)
 const nickname = ref(userStore.user.nickname)
-const email = ref(userStore.user.email)
-const country = ref(userStore.user.country)
+const email = ref(userStore.user.email || '')
+const country = ref(userStore.user.country || '')
 
 // 设置初始头像显示
 const imageUrl = ref('')
@@ -45,8 +45,8 @@ const loading = ref(false)
 const form = ref({
   _id: _id.value,
   nickname: nickname.value,
-  email: email.value,
-  country: country.value,
+  email: email.value || '',
+  country: country.value || '',
   avatar: avatar.value
 })
 
@@ -78,7 +78,9 @@ const handleSave = async () => {
   loading.value = true
   const formData = new FormData()
   Object.keys(form.value).forEach((key) => {
-    formData.append(key, form.value[key])
+    if (form.value[key] !== '') {
+      formData.append(key, form.value[key])
+    }
   })
   await userUpdateService(formData)
   // 重新渲染

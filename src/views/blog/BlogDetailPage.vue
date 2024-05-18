@@ -92,7 +92,7 @@ const reGet = () => {
   getCommentList()
 }
 
-// 返回首页
+// 返回上一页
 const goBack = () => {
   router.back()
 }
@@ -173,9 +173,7 @@ const cancelFollow = () => {
   <!-- 按钮区域 -->
   <div class="button">
     <div class="back">
-      <el-button :style="{ background: color }" size="large" @click="goBack"
-        >返回博客列表</el-button
-      >
+      <el-button :style="{ background: color }" size="large" @click="goBack">返回</el-button>
     </div>
     <div class="setting" v-if="userStore.user._id === blogDetail.author._id">
       <el-button
