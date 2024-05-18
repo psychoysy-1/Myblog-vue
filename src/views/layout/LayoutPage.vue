@@ -72,20 +72,28 @@ const changeTheme = (newTheme) => {
           </template>
         </el-menu-item>
         <el-menu-item index="/socialHall" :class="{ show: isAsideShow }" class="delay2">
-          <el-icon><Comment /></el-icon>
-          <template #title>社交大厅</template>
+          <template #title>
+            <el-icon><Comment /></el-icon>
+            <span>社交大厅</span>
+          </template>
         </el-menu-item>
         <el-menu-item index="/photoWall" :class="{ show: isAsideShow }" class="delay3">
-          <el-icon><PictureFilled /></el-icon>
-          <template #title>照片墙</template>
+          <template #title>
+            <el-icon><PictureFilled /></el-icon>
+            <span>照片墙</span>
+          </template>
         </el-menu-item>
         <el-menu-item index="/notice" :class="{ show: isAsideShow }" class="delay4">
-          <el-icon><BellFilled /></el-icon>
-          <template #title>通知</template>
+          <template #title>
+            <el-icon><BellFilled /></el-icon>
+            <span>通知</span>
+          </template>
         </el-menu-item>
         <el-menu-item index="/setting" :class="{ show: isAsideShow }" class="delay5">
-          <el-icon><Tools /></el-icon>
-          <template #title>设置</template>
+          <template #title>
+            <el-icon><Tools /></el-icon>
+            <span>设置</span>
+          </template>
         </el-menu-item>
 
         <!-- 用户内容 -->
@@ -158,6 +166,19 @@ a {
 // 主题设置
 .dark {
   background-color: #282523;
+  color: #e6e6e6;
+}
+.dark .is-active {
+  background-color: #363433 !important;
+}
+.dark span,
+.dark .el-icon,
+.el-menu-item.dark {
+  color: #e6e6e6;
+}
+.dark .el-menu-item:hover {
+  background-color: #363433;
+  transition: all 0.3s ease-in-out;
 }
 .el-main.dark {
   background-color: #131312;

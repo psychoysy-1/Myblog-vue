@@ -1,7 +1,8 @@
 <script setup>
 import { View, ChatRound, Files, Clock } from '@element-plus/icons-vue'
-import { useBlogStore } from '@/stores'
+import { useBlogStore, useThemeStore } from '@/stores'
 import { blogAddViewService } from '@/api/blog'
+import { ref } from 'vue'
 
 const blogStore = useBlogStore()
 
@@ -29,10 +30,14 @@ const giveDetail = () => {
   blogAddViewService(content.article._id)
   blogStore.setBlogContent(content.article)
 }
+
+// 主题色
+const themeStore = useThemeStore()
+const theme = ref(themeStore.theme)
 </script>
 
 <template>
-  <div class="blog-content">
+  <div class="blog-content" :class="theme">
     <div class="left">
       <img v-if="article.imageUrl" :src="`http://localhost:3000${article.imageUrl[0]}`" alt="" />
       <img v-else src="@/assets/default.png" alt="" />
@@ -81,6 +86,9 @@ const giveDetail = () => {
 </template>
 
 <style scoped>
+.dark {
+  background-color: #282523;
+}
 .blog-content {
   width: 900px;
   height: 300px;

@@ -12,7 +12,6 @@ const getArticles = async () => {
   loading.value = true
   const res = await blogGetAllService() //获取博客
   articles.value = res.data.articles
-  console.log(res.data.articles)
   loading.value = false
 }
 getArticles()
@@ -45,5 +44,8 @@ h1 {
   border-radius: 10px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
   margin: 0 auto 20px;
+}
+.dark {
+  background-color: #282523;
 }
 </style>

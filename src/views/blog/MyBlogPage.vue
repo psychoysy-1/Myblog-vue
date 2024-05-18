@@ -1,6 +1,6 @@
 <script setup>
 import { ref, nextTick, computed } from 'vue'
-import { useUserStore } from '@/stores'
+import { useUserStore, useThemeStore } from '@/stores'
 import { uploadBgService, userUpdateService } from '@/api/user'
 import PublishBlog from './components/PublishEdit.vue'
 import { Edit, Search, Expand, Fold } from '@element-plus/icons-vue'
@@ -12,6 +12,10 @@ import { blogGetListService, blogGetFilterService } from '@/api/blog'
 const userStore = useUserStore()
 const _id = ref(userStore.user._id)
 const nickname = userStore.user.nickname
+
+// 获取主题
+const themeStore = useThemeStore()
+const theme = ref(themeStore.theme)
 
 // 背景图片
 let bgImg = ref('')
@@ -239,7 +243,12 @@ const reGet = () => {
 
   <!-- 博客列表 -->
   <div class="blogList" v-loading="loading">
-    <blog-content v-for="article in articles" :key="article._id" :article="article"></blog-content>
+    <blog-content
+      v-for="article in articles"
+      :key="article._id"
+      :article="article"
+      :class="theme"
+    ></blog-content>
   </div>
 </template>
 
