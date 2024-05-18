@@ -23,3 +23,6 @@ export const blogSetPrivateService = (id, data) => request.put(`/articles/${id}/
 
 //根据文章id获取发表该文章的用户信息
 export const blogGetUserByArticleIdService = (id) => request.get(`/articles/${id}/userInfo`)
+
+// 根据文章id获取文章详情
+export const blogGetDetailService = (id) => request.get(`/articles/${id}`)

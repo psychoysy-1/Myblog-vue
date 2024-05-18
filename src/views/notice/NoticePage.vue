@@ -1,10 +1,15 @@
 <script setup>
 import { useUserStore } from '@/stores'
 import { getFollowersArticlesService } from '@/api/notice'
+import { blogGetDetailService } from '@/api/blog'
 import { ref } from 'vue'
 import moment from 'moment'
 import { differenceInDays } from 'date-fns'
+import { useRouter } from 'vue-router'
+import { useBlogStore } from '@/stores'
 
+const blogStore = useBlogStore()
+const router = useRouter()
 const userStore = useUserStore()
 
 // 获取关注者文章信息
@@ -29,14 +34,25 @@ const getFollowersArticles = async () => {
 }
 getFollowersArticles()
 
-const blogDetail = () => {}
+const blogDetail = async (ArticleId) => {
+  // 获取文章信息
+  const res = await blogGetDetailService(ArticleId)
+  blogStore.setBlogContent(res.data.article)
+  // 跳转到文章详情页
+  router.push('blogDetail')
+}
 </script>
 
 <template>
   <page-container title="通知" style="background-color: #f0f0f0">
     <template v-if="noticeForm.recent.length > 0 || noticeForm.older.length > 0">
       <show-container title="近一周">
-        <div class="column" v-for="item in noticeForm.recent" :key="item._id" @click="blogDetail">
+        <div
+          class="column"
+          v-for="item in noticeForm.recent"
+          :key="item._id"
+          @click="blogDetail(item._id)"
+        >
           <img :src="`http://localhost:3000/${item.authorInfo[0].avatar}`" alt="" />
           <div class="content">
             <p>{{ item.authorInfo[0].nickname }} 发布了新的文章《{{ item.title }}》</p>
@@ -46,7 +62,12 @@ const blogDetail = () => {}
       </show-container>
 
       <show-container title="更早">
-        <div class="column" v-for="item in noticeForm.older" :key="item._id" @click="blogDetail">
+        <div
+          class="column"
+          v-for="item in noticeForm.older"
+          :key="item._id"
+          @click="blogDetail(item._id)"
+        >
           <img :src="`http://localhost:3000/${item.authorInfo[0].avatar}`" alt="" />
           <div class="content">
             <p>{{ item.authorInfo[0].nickname }} 发布了新的文章《{{ item.title }}》</p>
