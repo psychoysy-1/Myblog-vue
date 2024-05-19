@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { getPhotoWallService } from '@/api/photoWall'
-import { useUserStore } from '@/stores'
+import { useUserStore, useThemeStore } from '@/stores'
 
 // 获取用户id
 const userStore = useUserStore()
@@ -27,10 +27,14 @@ const getPhotoWall = async () => {
   loading.value = false
 }
 getPhotoWall()
+
+// 主题色
+const themeStore = useThemeStore()
+const theme = ref(themeStore.theme)
 </script>
 
 <template>
-  <div class="photowall" v-loading="loading" v-if="photo.length">
+  <div class="photowall" v-loading="loading" v-if="photo.length" :class="theme">
     <div class="image-container" v-for="(item, index) in photo" :key="index">
       <img
         :src="`http://localhost:3000${item}`"
@@ -46,6 +50,14 @@ getPhotoWall()
 </template>
 
 <style scoped>
+/* 设置主题色 */
+.photowall.dark {
+  background-color: #282523;
+}
+.dark .ima {
+  background-color: #978c85;
+}
+
 .no-photo {
   text-align: center;
   margin-top: 50px;

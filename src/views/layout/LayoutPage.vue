@@ -98,7 +98,7 @@ const changeTheme = (newTheme) => {
 
         <!-- 用户内容 -->
         <div class="user-info-module">
-          <div class="user-info">
+          <div class="user-info" :class="theme">
             <img
               v-if="userStore.user.avatar"
               class="avatar"
@@ -123,7 +123,7 @@ const changeTheme = (newTheme) => {
         <wechat-dialog ref="dialog"></wechat-dialog>
 
         <!-- 用户设置 -->
-        <div class="options-box" v-show="showOptionsBox">
+        <div class="options-box" v-show="showOptionsBox" :class="theme">
           <div class="theme-module">
             <span>主题设置:</span>
             <div class="change-theme">
@@ -170,6 +170,18 @@ a {
 }
 .dark .is-active {
   background-color: #363433 !important;
+}
+.options-box.dark {
+  background-color: #282523;
+}
+.options-box.dark .el-link:hover {
+  background-color: #909399;
+}
+.options-box.dark .logout-btn:hover {
+  background-color: #909399;
+}
+.user-info.dark:hover span {
+  color: black;
 }
 .dark span,
 .dark .el-icon,

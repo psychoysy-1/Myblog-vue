@@ -1,15 +1,28 @@
 <script setup>
+import { useThemeStore } from '@/stores'
+import { ref, watch } from 'vue'
+
 defineProps({
   title: {
     required: true,
     type: String
   }
 })
+
+// 主题色
+const themeStore = useThemeStore()
+const theme = ref(themeStore.theme)
+watch(
+  () => themeStore.theme,
+  (newTheme) => {
+    theme.value = newTheme
+  }
+)
 </script>
 
 <template>
   <!-- 设置里的展示块 -->
-  <el-card class="show-container" shadow="never">
+  <el-card class="show-container" shadow="never" :class="theme">
     <template #header>
       <div class="header">
         <span>{{ title }}</span>
@@ -21,6 +34,12 @@ defineProps({
 </template>
 
 <style scoped>
+/* 主题色设置 */
+.dark {
+  background-color: #282523;
+  color: rgb(255, 255, 255);
+}
+
 .show-container {
   width: 624px;
   border-radius: 10px;

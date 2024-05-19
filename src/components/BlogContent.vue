@@ -86,9 +86,6 @@ const theme = ref(themeStore.theme)
 </template>
 
 <style scoped>
-.dark {
-  background-color: #282523;
-}
 .blog-content {
   width: 900px;
   height: 300px;

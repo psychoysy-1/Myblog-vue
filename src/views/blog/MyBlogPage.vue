@@ -253,6 +253,9 @@ const reGet = () => {
 </template>
 
 <style scoped>
+.blogList .dark {
+  background-color: #282523;
+}
 /* 博客内容区域 */
 .blogList {
   width: 900px;

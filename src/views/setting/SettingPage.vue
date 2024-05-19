@@ -1,7 +1,20 @@
-<script setup></script>
+<script setup>
+import { useThemeStore } from '@/stores'
+import { ref, watch } from 'vue'
+
+// 主题色
+const themeStore = useThemeStore()
+const theme = ref(themeStore.theme)
+watch(
+  () => themeStore.theme,
+  (newTheme) => {
+    theme.value = newTheme
+  }
+)
+</script>
 
 <template>
-  <page-container title="设置" class="container" style="background-color: #f0f0f0">
+  <page-container title="设置" class="container">
     <el-menu
       router
       class="el-menu"
@@ -12,6 +25,7 @@
         backgroundColor: '#f0f0f0',
         padding: 0
       }"
+      :class="theme"
     >
       <el-menu-item index="/setting/baseInfo" class="menu-item"> 基本信息 </el-menu-item>
       <el-menu-item index="/setting/account" class="menu-item"> 账户设置 </el-menu-item>
@@ -24,6 +38,13 @@
 </template>
 
 <style scoped>
+.el-menu.dark {
+  background-color: #131312 !important;
+}
+.el-menu.dark li {
+  color: #fff;
+}
+
 :deep(.el-card__body) {
   padding: 0;
 }

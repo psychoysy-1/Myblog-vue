@@ -1,14 +1,27 @@
 <script setup>
+import { useThemeStore } from '@/stores'
+import { ref, watch } from 'vue'
+
 defineProps({
   title: {
     required: true,
     type: String
   }
 })
+
+const themeStore = useThemeStore()
+const theme = ref(themeStore.theme)
+
+watch(
+  () => themeStore.theme,
+  (newTheme) => {
+    theme.value = newTheme
+  }
+)
 </script>
 
 <template>
-  <el-card class="page-container">
+  <el-card class="page-container" :class="theme" style="background-color: #f0f0f0">
     <template #header>
       <div class="card-header">
         <span>{{ title }}</span>
@@ -20,6 +33,10 @@ defineProps({
 </template>
 
 <style scoped>
+/* 主题色设置 */
+.el-card.dark {
+  background-color: #131312 !important;
+}
 .page-container {
   min-height: 100%;
   width: 728px;

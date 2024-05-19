@@ -44,7 +44,7 @@ const blogDetail = async (ArticleId) => {
 </script>
 
 <template>
-  <page-container title="通知" style="background-color: #f0f0f0">
+  <page-container title="通知">
     <template v-if="noticeForm.recent.length > 0 || noticeForm.older.length > 0">
       <show-container title="近一周">
         <div
