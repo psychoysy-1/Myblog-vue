@@ -4,34 +4,16 @@
 
 This template should help get you started developing with Vue 3 in Vite.
 
-## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+使用该项目之前需要下载我的另一个node文件
 
 ## Project Setup
 
-```sh
+下载所有包:
 pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+启动:
+pnpm run dev
 
-```sh
-pnpm dev
-```
-
-### Compile and Minify for Production
-
-```sh
-pnpm build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
-```
+设置中部分功能没有完善,仅做展示效果
