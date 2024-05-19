@@ -43,8 +43,8 @@ setInterval(() => {
   isAsideShow.value = true
 }, 20)
 
+// 设置主题切换
 const theme = ref(themeStore.theme)
-
 const changeTheme = (newTheme) => {
   theme.value = newTheme
   themeStore.setTheme(newTheme)
