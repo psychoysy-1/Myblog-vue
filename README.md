@@ -10,11 +10,14 @@ This template should help get you started developing with Vue 3 in Vite.
 ## Project Setup
 
 下载所有包:
+```
 pnpm install
 ```
 
 启动:
+```
 pnpm run dev
+```
 
 设置中部分功能没有完善,仅做展示效果
 下面是主要界面展示
